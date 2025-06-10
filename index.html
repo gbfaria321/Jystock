@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="jython">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JyStock - Soluções Inteligentes para seu Estoque</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Cores Jython (Padrão) */
+        :root {
+            --bg-dark: #081409; /* Preto esverdeado profundo */
+            --bg-medium: #0d1b0e; /* Fundo principal escuro */
+            --bg-light: #1a2e1b; /* Fundo de cards, sidebar, header */
+            --bg-lighter: #243e25; /* Fundo de hover, tabelas (alternado) */
+            --text-green-light: #d1f7d6; /* Texto claro */
+            --text-green-medium: #b7f5bb; /* Texto médio */
+            --text-green-dark: #7fcf85; /* Texto mais escuro (para labels/placeholders) */
+            --accent-green-primary: #63d471; /* Cor de destaque principal (botões, links) */
+            --accent-green-secondary: #233329; /* Cor de destaque secundária (degrades, bordas internas) */
+            --border-color: #3a5c3b; /* Cor de borda */
+            --shadow-color: rgba(0, 0, 0, 0.5); /* Sombra mais forte para dark mode */
+            --text-color-default: var(--text-green-light);
+            --text-color-muted: var(--text-green-dark);
+            --sidebar-icon-color: var(--text-green-medium);
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+
+            --scrollbar-bg: var(--bg-medium);
+            --scrollbar-thumb: var(--accent-green-primary);
+            --scrollbar-thumb-hover: var(--text-green-light);
+
+            --image-placeholder-bg: var(--bg-lighter);
+            --image-placeholder-icon: var(--text-green-dark);
+
+            /* Personalization Defaults */
+            --base-font-size: 16px; /* Medium */
+            --table-padding: 1rem 1.5rem; /* Comfortable */
+            --list-item-padding: 0.75rem 1rem; /* Comfortable */
+        }
+        html {
+            font-size: var(--base-font-size);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-dark);
+            color: var(--text-color-default);
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-bg);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--scrollbar-thumb);
+            border-radius: 10px;
+            border: 3px solid var(--scrollbar-bg); 
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: var(--scrollbar-thumb-hover);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header-main {
+            background-color: var(--bg-light);
+            color: var(--text-color-default);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn {
+            font-weight: 600;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.25s ease-out;
+            box-shadow: 0 2px 8px color-mix(in srgb, var(--accent-green-primary) 20%, transparent);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: linear-gradient(to right, var(--accent-green-primary), color-mix(in srgb, var(--accent-green-primary) 80%, var(--accent-green-secondary)));
+            color: var(--bg-dark) !important;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 4px 12px color-mix(in srgb, var(--accent-green-primary) 40%, transparent);
+        }
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--accent-green-primary);
+            color: var(--accent-green-primary);
+        }
+        .btn-secondary:hover {
+            background-color: var(--accent-green-primary);
+            color: var(--bg-dark) !important; 
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px color-mix(in srgb, var(--accent-green-primary) 20%, transparent);
+        }
+
+        .section-card {
+            background-color: var(--bg-light);
+            border-radius: 0.75rem;
+            box-shadow: 0 6px 20px var(--shadow-color);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.5s ease-out;
+            border: 1px solid var(--border-color);
+        }
+
+        .section-card.animate-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .section-card.animate-fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feature-card {
+            background-color: var(--bg-medium);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px color-mix(in srgb, var(--accent-green-primary) 20%, transparent);
+        }
+
+        .jy-stock-logo {
+            height: 40px;
+            width: 40px;
+            fill: var(--accent-green-primary);
+            transition: fill 0.3s ease;
+        }
+
+        /* Hero Section Specifics */
+        #hero {
+            background-image: linear-gradient(to bottom right, var(--bg-dark), var(--bg-medium));
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top left, var(--accent-green-primary) 5%, transparent 20%),
+                        radial-gradient(circle at bottom right, var(--accent-green-secondary) 5%, transparent 20%);
+            opacity: 0.1;
+            z-index: 0;
+        }
+        #hero .content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .mockup-display {
+            background-color: var(--bg-dark);
+            border: 2px solid var(--border-color);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            margin-top: 3rem;
+        }
+
+        .mockup-header {
+            background-color: var(--bg-lighter);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.875rem;
+            color: var(--text-color-muted);
+        }
+
+        .mockup-content {
+            background-color: var(--bg-medium);
+            padding: 1.5rem;
+            min-height: 400px; /* Adjust as needed */
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .mockup-content.flex-col {
+            flex-direction: column;
+        }
+
+        .mockup-sidebar {
+            width: 200px;
+            background-color: var(--bg-light);
+            border-right: 1px solid var(--border-color);
+            padding: 1rem;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+            flex-shrink: 0;
+            border-radius: 0.5rem;
+        }
+
+        .mockup-main-content {
+            flex-grow: 1;
+            background-color: var(--bg-light);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            overflow-y: auto;
+            max-height: 380px;
+        }
+
+        /* Small version of inventory system styles */
+        .mock-table-header th {
+            background-color: var(--bg-lighter);
+            color: var(--text-color-muted);
+            font-weight: 600;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.75rem;
+        }
+        .mock-table-cell {
+            color: var(--text-color-default);
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.8rem;
+        }
+        .mock-status-badge {
+            padding: 0.1rem 0.4rem;
+            border-radius: 9999px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            border: 1px solid transparent;
+        }
+        .mock-status-esgotado {
+            background-color: color-mix(in srgb, var(--danger-color) 20%, transparent);
+            color: var(--danger-color) !important;
+            border-color: var(--danger-color);
+        }
+        .mock-status-baixo-estoque {
+            background-color: color-mix(in srgb, var(--warning-color) 20%, transparent);
+            color: var(--warning-color) !important;
+            border-color: var(--warning-color);
+        }
+        .mock-status-ok {
+             background-color: color-mix(in srgb, var(--accent-green-primary) 20%, transparent);
+             color: var(--accent-green-primary) !important;
+             border-color: var(--accent-green-primary);
+        }
+
+        .mock-input-field, .mock-select-field {
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--text-color-default);
+            border-radius: 0.3rem;
+            padding: 0.4rem 0.6rem;
+            font-size: 0.8rem;
+        }
+
+        .mock-button {
+            background-color: var(--accent-green-primary);
+            color: var(--bg-dark);
+            padding: 0.3rem 0.7rem;
+            border-radius: 0.3rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .mock-button:hover {
+            opacity: 0.9;
+        }
+
+        .mock-dashboard-card {
+            background-color: var(--bg-lighter);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+        .mock-dashboard-card .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-green-primary);
+        }
+        .mock-dashboard-card .label {
+            font-size: 0.75rem;
+            color: var(--text-color-muted);
+        }
+        .mock-dashboard-card.warning .value { color: var(--warning-color); }
+        .mock-dashboard-card.danger .value { color: var(--danger-color); }
+
+        .image-placeholder-sm {
+            width: 24px;
+            height: 24px;
+            object-fit: cover;
+            border-radius: 0.2rem; /* rounded-md */
+            background-color: var(--image-placeholder-bg);
+            color: var(--image-placeholder-icon);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+        }
+
+        /* Contact Dropdown */
+        .contact-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .contact-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--bg-medium);
+            min-width: 100%; /* Ocupa toda a largura do botão pai */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            z-index: 1;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            top: 100%; /* Position below the button */
+            left: 0;
+            transform: translateY(10px); /* Small offset */
+            opacity: 0;
+            visibility: hidden;
+            transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s;
+        }
+        .contact-dropdown-content.show {
+            display: block;
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+        .contact-dropdown-content a {
+            color: var(--text-color-default);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.2s ease;
+        }
+        .contact-dropdown-content a:hover {
+            background-color: var(--bg-lighter);
+            color: var(--accent-green-primary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--bg-light);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            text-align: center;
+            color: var(--text-color-muted);
+        }
+        footer a {
+            color: var(--accent-green-primary);
+            transition: color 0.2s ease;
+        }
+        footer a:hover {
+            color: var(--text-green-light);
+        }
+
+        /* Mockup Tabs */
+        .mockup-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+        }
+        .mockup-tab-button {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            color: var(--text-color-muted);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            white-space: nowrap; /* Prevent text wrapping */
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+        .mockup-tab-button.active-tab {
+            color: var(--accent-green-primary);
+            border-color: var(--accent-green-primary);
+            font-weight: 600;
+        }
+        .mockup-tab-button:hover:not(.active-tab) {
+            color: var(--text-color-default);
+            background-color: var(--bg-lighter);
+        }
+        .mockup-tab-content {
+            display: none;
+        }
+        .mockup-tab-content.active-tab-content {
+            display: block;
+        }
+        
+        /* Future Preview Mockups specific styles */
+        .future-mockup-container {
+            background-color: var(--bg-medium);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            margin-top: 1.5rem;
+            text-align: left;
+            display: none; /* Hidden by default */
+        }
+        .future-mockup-container.active {
+            display: block; /* Show when active */
+        }
+        .future-mockup-header {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 600; /* semibold */
+            color: var(--text-color-default);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+        .future-mockup-content {
+            font-size: 0.875rem; /* text-sm */
+            color: var(--text-color-muted);
+        }
+        .future-mockup-content .mock-input-field,
+        .future-mockup-content .mock-select-field,
+        .future-mockup-content .mock-button {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .future-mockup-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .future-mockup-table th,
+        .future-mockup-table td {
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            text-align: left;
+            font-size: 0.8rem;
+            color: var(--text-color-default);
+        }
+        .future-mockup-table th {
+            background-color: var(--bg-lighter);
+            color: var(--text-color-muted);
+        }
+
+        /* FAQ Styling */
+        .faq-item {
+            background-color: var(--bg-medium);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            cursor: default; /* No pointer for non-collapsible */
+            font-weight: 600;
+            color: var(--text-color-default);
+            background-color: var(--bg-medium);
+        }
+        .faq-question i {
+            display: none; /* Hide toggle icon */
+        }
+        .faq-answer {
+            padding: 0.5rem 1.5rem 1rem 1.5rem; /* Always visible and padded */
+            color: var(--text-color-muted);
+            max-height: fit-content; /* Ensure content is visible */
+            overflow: visible;
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            .section-card {
+                padding: 1.5rem;
+            }
+            .mockup-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .mockup-sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .mockup-header h2 {
+                font-size: 1rem;
+            }
+            .mock-table-header th, .mock-table-cell {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.5rem;
+            }
+            .mock-dashboard-card .value { font-size: 1.25rem; }
+            .mock-dashboard-card .label { font-size: 0.65rem; }
+            .mock-button { font-size: 0.7rem; padding: 0.25rem 0.5rem; }
+            .pricing-card { padding: 1.5rem; }
+            .pricing-card .price { font-size: 2.5rem; }
+            .pricing-card .frequency { font-size: 0.9rem; }
+            .payment-options-container {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header-main sticky top-0 z-50 p-4 mb-6 flex justify-between items-center backdrop-blur-sm bg-opacity-80">
+        <div class="flex items-center space-x-2">
+            <svg class="jy-stock-logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21.44 9.78L12.75 4.31C12.45 4.13 12.11 4.04 11.77 4.04C11.42 4.04 11.08 4.13 10.78 4.31L2.09 9.78C1.79 9.96 1.56 10.22 1.42 10.54C1.28 10.86 1.25 11.21 1.33 11.55L2.8 17.73C2.95 18.38 3.33 18.96 3.86 19.34L11.12 23.68C11.42 23.86 11.77 23.96 12.11 23.96C12.46 23.96 12.81 23.86 13.11 23.68L20.37 19.34C20.9 18.96 21.28 18.38 21.43 17.73L22.9 11.55C22.98 11.21 22.95 10.86 22.81 10.54C22.67 10.22 22.44 9.96 22.14 9.78L21.44 9.78ZM12.11 5.96L19.53 10.53L16.2 12.44L8.78 7.87L12.11 5.96ZM3.18 11.14L7.85 7.83L11.18 9.74L6.51 13.05L3.18 11.14ZM12.11 22.04L4.69 17.47L8.02 15.56L12.11 18.11L16.2 15.56L19.53 17.47L12.11 22.04ZM21.05 17.11L17.13 13.05L13.04 15.6L16.37 17.51L21.05 17.11L21.05 17.11Z" fill="currentColor"/>
+            </svg>
+            <span class="text-3xl font-bold text-[var(--accent-green-primary)]">JyStock</span>
+        </div>
+        <nav>
+            <ul class="flex space-x-6">
+                <li><a href="#about" class="text-[var(--text-color-default)] hover:text-[var(--accent-green-primary)] transition">Sobre</a></li>
+                <li><a href="#features" class="text-[var(--text-color-default)] hover:text-[var(--accent-green-primary)] transition">Funções</a></li>
+                <li><a href="#design" class="text-[var(--text-color-default)] hover:text-[var(--accent-green-primary)] transition">Design</a></li>
+                <li><a href="#system-mockup" class="text-[var(--text-color-default)] hover:text-[var(--accent-green-primary)] transition">Preview</a></li>
+                <li><a href="#future" class="text-[var(--text-color-default)] hover:text-[var(--accent-green-primary)] transition">Futuro</a></li>
+                <li><a href="#pricing" class="text-[var(--text-color-default)] hover:text-[var(--accent-green-primary)] transition">Preços</a></li>
+                <li><a href="#support" class="text-[var(--text-color-default)] hover:text-[var(--accent-green-primary)] transition">Suporte</a></li>
+                <li><a href="login.html" class="text-[var(--accent-green-primary)] border border-[var(--accent-green-primary)] px-3 py-1 rounded hover:bg-[var(--accent-green-primary)] hover:text-white transition">Entrar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="hero" class="relative py-20">
+        <div class="content z-10 max-w-4xl px-4">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-[var(--text-green-light)] mb-6 leading-tight animate-fade-in-up">
+                Otimize seu Estoque. Maximize seus Lucros.
+            </h1>
+            <p class="text-xl md:text-2xl text-[var(--text-color-muted)] mb-10 animate-fade-in-up animation-delay-300">
+                O JyStock é a solução completa para o controle inteligente do seu inventário e gestão de vendas.
+            </p>
+            <button onclick="scrollToElement('pricing')" class="btn btn-primary text-xl px-10 py-4 animate-fade-in-up animation-delay-600">
+                Experimente 30 Dias Grátis!
+            </button>
+        </div>
+    </section>
+
+    <main class="container">
+        <section id="about" class="section-card animate-fade-in">
+            <h2 class="text-4xl font-bold text-[var(--accent-green-primary)] mb-6 text-center">Quem Somos e o Que Oferecemos</h2>
+            <p class="text-lg text-[var(--text-color-default)] leading-relaxed mb-6">
+                Na JyStock, acreditamos que a gestão eficiente do estoque é a espinha dorsal de qualquer negócio bem-sucedido. Desenvolvemos um sistema intuitivo e robusto, projetado para simplificar a complexidade do controle de inventário, permitindo que você foque no que realmente importa: o crescimento da sua empresa. Somos apaixonados por tecnologia e por criar soluções que impulsionam a produtividade e a tomada de decisões estratégicas.
+            </p>
+            <p class="text-lg text-[var(--text-color-default)] leading-relaxed">
+                Nosso sistema de controle de estoque e vendas é mais do que uma ferramenta; é um parceiro estratégico que oferece visibilidade total sobre seus produtos, desde a entrada até a saída, garantindo que você nunca perca uma venda por falta de informação ou organização. Com o JyStock, transforme a administração do seu inventário de um desafio em uma vantagem competitiva.
+            </p>
+        </section>
+
+        <section id="features" class="section-card animate-fade-in">
+            <h2 class="text-4xl font-bold text-[var(--accent-green-primary)] mb-8 text-center">Funções Essenciais para o Seu Negócio</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="feature-card">
+                    <i class="fas fa-boxes-stacked text-3xl text-[var(--sidebar-icon-color)] mb-3"></i>
+                    <h3 class="text-xl font-semibold text-[var(--text-color-default)] mb-2">Gestão de Mercadorias</h3>
+                    <p class="text-[var(--text-color-muted)]">Cadastro detalhado, edição e remoção de produtos, com informações como preço, custo, estoque mínimo e imagem.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-folder-tree text-3xl text-[var(--sidebar-icon-color)] mb-3"></i>
+                    <h3 class="text-xl font-semibold text-[var(--text-color-default)] mb-2">Grupos de Mercadorias</h3>
+                    <p class="text-[var(--text-color-muted)]">Organize seus produtos em grupos personalizados para uma categorização e busca eficientes.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-arrow-circle-down text-3xl text-[var(--sidebar-icon-color)] mb-3"></i>
+                    <h3 class="text-xl font-semibold text-[var(--text-color-default)] mb-2">Entrada de Estoque</h3>
+                    <p class="text-[var(--text-color-muted)]">Registre a chegada de novas mercadorias de forma rápida e precisa, atualizando o inventário.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-arrow-circle-up text-3xl text-[var(--sidebar-icon-color)] mb-3"></i>
+                    <h3 class="text-xl font-semibold text-[var(--text-color-default)] mb-2">Saída de Estoque</h3>
+                    <p class="text-[var(--text-color-muted)]">Controle as saídas de produtos por vendas, perdas, avarias ou outras razões.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-exchange-alt text-3xl text-[var(--sidebar-icon-color)] mb-3"></i>
+                    <h3 class="text-xl font-semibold text-[var(--text-color-default)] mb-2">Transferência entre Locais</h3>
+                    <p class="text-[var(--text-color-muted)]">Movimente mercadorias entre diferentes locais de armazenamento ou filiais com facilidade.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-exclamation-triangle text-3xl text-[var(--sidebar-icon-color)] mb-3"></i>
+                    <h3 class="text-xl font-semibold text-[var(--text-color-default)] mb-2">Avisos de Estoque</h3>
+                    <p class="text-[var(--text-color-muted)]">Receba alertas em tempo real sobre produtos com estoque baixo ou esgotado para reposição imediata.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-percentage text-3xl text-[var(--sidebar-icon-color)] mb-3"></i>
+                    <h3 class="text-xl font-semibold text-[var(--text-color-default)] mb-2">Cupons e Promoções</h3>
+                    <p class="text-[var(--text-color-muted)]">Crie e gerencie cupons de desconto e campanhas promocionais para impulsionar suas vendas.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-history text-3xl text-[var(--sidebar-icon-color)] mb-3"></i>
+                    <h3 class="text-xl font-semibold text-[var(--text-color-default)] mb-2">Histórico de Movimentações</h3>
+                    <p class="text-[var(--text-color-muted)]">Acompanhe um registro detalhado de todas as transações e alterações no estoque.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line text-3xl text-[var(--sidebar-icon-color)] mb-3"></i>
+                    <h3 class="text-xl font-semibold text-[var(--text-color-default)] mb-2">Análise de Vendas</h3>
+                    <p class="text-[var(--text-color-muted)]">Obtenha insights valiosos com gráficos e relatórios sobre o desempenho de suas vendas.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="design" class="section-card animate-fade-in">
+            <h2 class="text-4xl font-bold text-[var(--accent-green-primary)] mb-6 text-center">Design Intuitivo e Totalmente Personalizável</h2>
+            <p class="text-lg text-[var(--text-color-default)] leading-relaxed mb-8">
+                O JyStock foi desenvolvido com foco na experiência do usuário. Apresentamos um design moderno, limpo e intuitivo, que torna o aprendizado e o domínio do sistema incrivelmente fáceis. Mas não paramos por aí: sabemos que cada usuário tem suas preferências, por isso oferecemos uma personalização sem precedentes.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-semibold text-[var(--text-color-default)] mb-3">Sua Interface, Suas Regras:</h3>
+                    <ul class="list-disc list-inside text-[var(--text-color-muted)] space-y-2">
+                        <li><i class="fas fa-palette mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Temas Visuais: Escolha entre uma ampla gama de temas, incluindo opções baseadas em linguagens de programação, monocromáticos e o padrão Jython Dark, para encontrar o visual que mais te agrada.
+                        </li>
+                        <li><i class="fas fa-text-height mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Tamanho da Fonte: Ajuste o tamanho do texto para garantir o máximo conforto visual.
+                        </li>
+                        <li><i class="fas fa-grip-lines-solid mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Densidade da Interface: Configure o espaçamento dos elementos para um visual mais compacto ou espaçoso.
+                        </li>
+                        <li><i class="fas fa-running mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Controle de Animações: Desative ou reduza as animações para uma experiência mais direta, se preferir.
+                        </li>
+                        <li><i class="fas fa-tag mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Nome Personalizado: Altere o nome do sistema exibido na interface para a identidade da sua marca.
+                        </li>
+                         <li><i class="fas fa-universal-access mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Modo de Alto Contraste (Preview): Aumente o contraste das cores para melhor legibilidade para usuários com baixa visão ou daltonismo.
+                        </li>
+                        <li><i class="fas fa-lightbulb mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Modo de Leitura (Preview): Otimiza a visualização para leitura prolongada, reduzindo distrações e melhorando a focabilidade.
+                        </li>
+                        <li><i class="fas fa-font mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Fonte Disléxica (Preview): Opção para utilizar fontes otimizadas para usuários com dislexia, facilitando a leitura de textos extensos.
+                        </li>
+                        <li><i class="fas fa-microphone mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Navegação por Voz (Preview): Capacidade de interagir com o sistema usando comandos de voz, ideal para usuários com dificuldades motoras.
+                        </li>
+                        <li><i class="fas fa-circle-notch mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Indicação de Foco Visual (Preview): Adiciona um contorno visível em elementos interativos, auxiliando na navegação por teclado.
+                        </li>
+                    </ul>
+                    <p class="text-[var(--text-color-muted)] mt-4">
+                        Com o JyStock, você não apenas gerencia seu estoque, mas também desfruta de uma experiência de uso adaptada às suas necessidades e estilo.
+                    </p>
+                </div>
+                <div class="mockup-display p-4">
+                    <div class="mockup-header">
+                        <h2>Personalização do Sistema</h2>
+                        <span><i class="fas fa-cog"></i></span>
+                    </div>
+                    <div class="mockup-content flex-col items-start p-4 space-y-4 max-h-[380px] overflow-y-auto custom-scrollbar">
+                        <div class="w-full">
+                            <label class="block text-sm font-medium text-[var(--text-color-muted)] mb-1">Nome do Sistema na Interface:</label>
+                            <input type="text" value="Meu Estoque Jython" class="mock-input-field w-full">
+                        </div>
+                        <div class="w-full">
+                            <label class="block text-sm font-medium text-[var(--text-color-muted)] mb-1">Tamanho da Fonte:</label>
+                            <select class="mock-select-field w-full">
+                                <option>Pequeno</option>
+                                <option selected>Médio (Padrão)</option>
+                                <option>Grande</option>
+                            </select>
+                        </div>
+                        <div class="w-full">
+                            <label class="block text-sm font-medium text-[var(--text-color-muted)] mb-1">Densidade da Interface:</label>
+                            <select class="mock-select-field w-full">
+                                <option>Compacto</option>
+                                <option selected>Confortável (Padrão)</option>
+                                <option>Espaçoso</option>
+                            </select>
+                        </div>
+                        <div class="w-full flex items-center justify-between">
+                            <span class="text-sm text-[var(--text-color-muted)]">Reduzir Animações:</span>
+                            <input type="checkbox" class="h-4 w-4 rounded text-[var(--accent-green-primary)]">
+                        </div>
+                        <div class="w-full flex items-center justify-between">
+                            <span class="text-sm text-[var(--text-color-muted)]">Modo de Alto Contraste:</span>
+                            <input type="checkbox" class="h-4 w-4 rounded text-[var(--accent-green-primary)]">
+                        </div>
+                        <div class="w-full flex items-center justify-between">
+                            <span class="text-sm text-[var(--text-color-muted)]">Modo de Leitura:</span>
+                            <input type="checkbox" class="h-4 w-4 rounded text-[var(--accent-green-primary)]">
+                        </div>
+                        <div class="w-full">
+                            <label class="block text-sm font-medium text-[var(--text-color-muted)] mb-1">Tipo de Fonte:</label>
+                            <select class="mock-select-field w-full">
+                                <option selected>Padrão</option>
+                                <option>OpenDyslexic</option>
+                            </select>
+                        </div>
+                        <div class="w-full flex items-center justify-between">
+                            <span class="text-sm text-[var(--text-color-muted)]">Navegação por Voz:</span>
+                            <input type="checkbox" class="h-4 w-4 rounded text-[var(--accent-green-primary)]">
+                        </div>
+                        <div class="w-full flex items-center justify-between">
+                            <span class="text-sm text-[var(--text-color-muted)]">Indicação de Foco:</span>
+                            <input type="checkbox" class="h-4 w-4 rounded text-[var(--accent-green-primary)]">
+                        </div>
+                        <h4 class="text-lg font-semibold text-[var(--text-color-default)] mt-4">Temas de Interface:</h4>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                             <div class="p-2 border border-[var(--border-color)] rounded flex items-center gap-2">
+                                <span class="block w-4 h-4 rounded-full bg-[var(--bg-medium)] border-2 border-[var(--accent-green-primary)]"></span> Jython Dark
+                            </div>
+                            <div class="p-2 border border-[var(--border-color)] rounded flex items-center gap-2">
+                                <span class="block w-4 h-4 rounded-full bg-[#f0f2f5] border-2 border-[#007bff]"></span> Monocromático Claro
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="system-mockup" class="section-card animate-fade-in">
+            <h2 class="text-4xl font-bold text-[var(--accent-green-primary)] mb-6 text-center">Experimente o JyStock: Visão Geral do Sistema</h2>
+            <p class="text-lg text-[var(--text-color-muted)] text-center mb-8">
+                Veja como é simples e eficiente navegar e operar as principais funções do sistema atual JyStock.
+            </p>
+            <div class="mockup-display">
+                <div class="mockup-header">
+                    <h2 id="mockupPageTitle" class="text-lg font-bold text-[var(--text-color-default)]">Dashboard</h2>
+                    <span class="flex items-center gap-2">
+                        <i class="fas fa-bell text-[var(--text-color-muted)]"></i>
+                        <input type="text" placeholder="Buscar..." class="mock-input-field !w-24 hidden md:block">
+                    </span>
+                </div>
+                <div class="mockup-content">
+                    <div class="mockup-sidebar">
+                        <ul class="space-y-1">
+                            <li><a href="#" class="block px-3 py-2 text-[var(--accent-green-primary)] font-semibold rounded hover:bg-[var(--bg-lighter)] mockup-nav-item" data-mockup-target="dashboard"><i class="fas fa-tachometer-alt mr-2"></i>Dashboard</a></li>
+                            <li><a href="#" class="block px-3 py-2 text-[var(--text-color-default)] rounded hover:bg-[var(--bg-lighter)] mockup-nav-item" data-mockup-target="inventory"><i class="fas fa-boxes-stacked mr-2"></i>Inventário</a></li>
+                            <li><a href="#" class="block px-3 py-2 text-[var(--text-color-default)] rounded hover:bg-[var(--bg-lighter)] mockup-nav-item" data-mockup-target="movements"><i class="fas fa-exchange-alt mr-2"></i>Movimentações</a></li>
+                            <li><a href="#" class="block px-3 py-2 text-[var(--text-color-default)] rounded hover:bg-[var(--bg-lighter)] mockup-nav-item" data-mockup-target="lowstock"><i class="fas fa-exclamation-triangle mr-2"></i>Baixo Estoque</a></li>
+                            <li><a href="#" class="block px-3 py-2 text-[var(--text-color-default)] rounded hover:bg-[var(--bg-lighter)] mockup-nav-item" data-mockup-target="sales"><i class="fas fa-chart-pie mr-2"></i>Vendas</a></li>
+                            <li><a href="#" class="block px-3 py-2 text-[var(--text-color-default)] rounded hover:bg-[var(--bg-lighter)] mockup-nav-item" data-mockup-target="groups"><i class="fas fa-folder-tree mr-2"></i>Grupos</a></li>
+                            <li><a href="#" class="block px-3 py-2 text-[var(--text-color-default)] rounded hover:bg-[var(--bg-lighter)] mockup-nav-item" data-mockup-target="coupons"><i class="fas fa-percentage mr-2"></i>Cupons</a></li>
+                            <li><a href="#" class="block px-3 py-2 text-[var(--text-color-default)] rounded hover:bg-[var(--bg-lighter)] mockup-nav-item" data-mockup-target="history"><i class="fas fa-history mr-2"></i>Histórico</a></li>
+                        </ul>
+                        <div class="mt-4 p-2 border-t border-[var(--border-color)]">
+                            <div class="flex items-center">
+                                <div class="w-7 h-7 rounded-full bg-[var(--bg-lighter)] flex items-center justify-center border border-[var(--accent-green-primary)]">
+                                    <i class="fas fa-user text-sm text-[var(--accent-green-primary)]"></i>
+                                </div>
+                                <span class="ml-2 text-sm text-[var(--text-color-default)]">Admin</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mockup-main-content custom-scrollbar">
+                        <div id="mockup-dashboard" class="mockup-content-pane active-mockup-pane">
+                            <h3 class="text-xl font-bold text-[var(--text-color-default)] mb-4">Visão Geral</h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
+                                <div class="mock-dashboard-card">
+                                    <div class="value">10</div>
+                                    <div class="label">Produtos Únicos</div>
+                                </div>
+                                <div class="mock-dashboard-card">
+                                    <div class="value">540</div>
+                                    <div class="label">Itens em Estoque</div>
+                                </div>
+                                <div class="mock-dashboard-card warning">
+                                    <div class="value">5</div>
+                                    <div class="label">Baixo Estoque</div>
+                                </div>
+                                <div class="mock-dashboard-card danger">
+                                    <div class="value">2</div>
+                                    <div class="label">Esgotados</div>
+                                </div>
+                                <div class="mock-dashboard-card">
+                                    <div class="value text-[var(--text-color-default)]">R$ 15.000</div>
+                                    <div class="label">Vendas (Mês)</div>
+                                </div>
+                                <div class="mock-dashboard-card">
+                                    <div class="value">8</div>
+                                    <div class="label">Cupons Ativos</div>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold text-[var(--text-color-default)] mb-3">Ações Rápidas</h3>
+                            <div class="flex flex-col gap-2">
+                                <button class="mock-button w-full"><i class="fas fa-plus-circle mr-1"></i> Adicionar Produto</button>
+                                <button class="mock-button w-full"><i class="fas fa-arrow-circle-down mr-1"></i> Registrar Entrada</button>
+                                <button class="mock-button w-full"><i class="fas fa-arrow-circle-up mr-1"></i> Registrar Saída</button>
+                            </div>
+                        </div>
+
+                        <div id="mockup-inventory" class="mockup-content-pane hidden">
+                            <h3 class="text-xl font-bold text-[var(--text-color-default)] mb-4">Todas as Mercadorias</h3>
+                            <div class="mockup-tabs">
+                                <button class="mockup-tab-button active-tab" data-tab="inventory-list">Lista Completa</button>
+                                <button class="mockup-tab-button" data-tab="inventory-add">Adicionar Novo</button>
+                                <button class="mockup-tab-button" data-tab="inventory-remove">Remover Item</button>
+                            </div>
+                            <div id="inventory-list" class="mockup-tab-content active-tab-content overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead class="mock-table-header">
+                                        <tr>
+                                            <th class="text-left">Cód.</th>
+                                            <th class="text-left">Nome</th>
+                                            <th class="text-left">Estoque</th>
+                                            <th class="text-left">Preço</th>
+                                            <th class="text-left">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="mock-table-cell">CONS001</td>
+                                            <td class="mock-table-cell">Playstation 5 Pro</td>
+                                            <td class="mock-table-cell">10</td>
+                                            <td class="mock-table-cell">R$ 4.499,90</td>
+                                            <td class="mock-table-cell"><span class="mock-status-ok">OK</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mock-table-cell">COMP001</td>
+                                            <td class="mock-table-cell">NVIDIA RTX 4090</td>
+                                            <td class="mock-table-cell">5</td>
+                                            <td class="mock-table-cell">R$ 10.999,90</td>
+                                            <td class="mock-table-cell"><span class="mock-status-ok">OK</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mock-table-cell">NOTE004</td>
+                                            <td class="mock-table-cell">Razer Blade 16</td>
+                                            <td class="mock-table-cell">0</td>
+                                            <td class="mock-table-cell">R$ 24.500,00</td>
+                                            <td class="mock-table-cell"><span class="mock-status-esgotado">Esgotado</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mock-table-cell">PERIG004</td>
+                                            <td class="mock-table-cell">HyperX Cloud Alpha S</td>
+                                            <td class="mock-table-cell">2</td>
+                                            <td class="mock-table-cell">R$ 620,00</td>
+                                            <td class="mock-table-cell"><span class="mock-status-baixo-estoque">Baixo Estoque</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="inventory-add" class="mockup-tab-content">
+                                <form class="space-y-3">
+                                    <input type="text" placeholder="Nome da Mercadoria" class="mock-input-field w-full">
+                                    <input type="text" placeholder="Código (único)" class="mock-input-field w-full">
+                                    <select class="mock-select-field w-full">
+                                        <option>Grupo: Periféricos</option>
+                                        <option>Grupo: Consoles</option>
+                                    </select>
+                                    <input type="number" placeholder="Preço de Venda" class="mock-input-field w-full">
+                                    <input type="number" placeholder="Estoque Mínimo" class="mock-input-field w-full">
+                                    <button type="submit" class="mock-button w-full">Adicionar</button>
+                                </form>
+                            </div>
+                            <div id="inventory-remove" class="mockup-tab-content">
+                                <form class="space-y-3">
+                                    <input type="text" placeholder="Código ou Nome da Mercadoria" class="mock-input-field w-full">
+                                    <button type="submit" class="mock-button !bg-[var(--danger-color)] w-full">Remover</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div id="mockup-movements" class="mockup-content-pane hidden">
+                            <h3 class="text-xl font-bold text-[var(--text-color-default)] mb-4">Registrar Movimentação</h3>
+                            <div class="mockup-tabs">
+                                <button class="mockup-tab-button active-tab" data-tab="movements-entry">Entrada</button>
+                                <button class="mockup-tab-button" data-tab="movements-output">Saída</button>
+                                <button class="mockup-tab-button" data-tab="movements-transfer">Transferência</button>
+                            </div>
+                            <div id="movements-entry" class="mockup-tab-content active-tab-content">
+                                <form class="space-y-3">
+                                    <input type="text" value="COMP001 - NVIDIA RTX 4090" class="mock-input-field w-full">
+                                    <input type="number" value="1" min="1" class="mock-input-field w-full">
+                                    <input type="text" placeholder="Custo Unitário (Opcional)" class="mock-input-field w-full">
+                                    <button class="mock-button w-full">Registrar Entrada</button>
+                                </form>
+                            </div>
+                            <div id="movements-output" class="mockup-tab-content">
+                                <form class="space-y-3">
+                                    <input type="text" value="PERIG004 - HyperX Cloud Alpha S" class="mock-input-field w-full">
+                                    <input type="number" value="1" min="1" class="mock-input-field w-full">
+                                    <select class="mock-select-field w-full">
+                                        <option>Venda</option>
+                                        <option>Perda/Avaria</option>
+                                    </select>
+                                    <button class="mock-button !bg-[var(--danger-color)] w-full">Registrar Saída</button>
+                                </form>
+                            </div>
+                            <div id="movements-transfer" class="mockup-tab-content">
+                                <form class="space-y-3">
+                                    <input type="text" value="SOFT003 - Gift Card Steam R$50" class="mock-input-field w-full">
+                                    <input type="number" value="5" min="1" class="mock-input-field w-full">
+                                    <select class="mock-select-field w-full">
+                                        <option>Origem: Estoque Central</option>
+                                        <option>Origem: Loja Física SP</option>
+                                    </select>
+                                    <select class="mock-select-field w-full">
+                                        <option>Destino: Loja Física SP</option>
+                                        <option>Destino: Estoque Central</option>
+                                    </select>
+                                    <button class="mock-button w-full">Realizar Transferência</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div id="mockup-lowstock" class="mockup-content-pane hidden">
+                            <h3 class="text-xl font-bold text-[var(--text-color-default)] mb-4">Mercadorias em Falta</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead class="mock-table-header">
+                                        <tr>
+                                            <th class="text-left">Cód.</th>
+                                            <th class="text-left">Nome</th>
+                                            <th class="text-left">Estoque</th>
+                                            <th class="text-left">Min.</th>
+                                            <th class="text-left">Status</th>
+                                            <th class="text-left">Ação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="mock-table-cell">NOTE004</td>
+                                            <td class="mock-table-cell">Razer Blade 16</td>
+                                            <td class="mock-table-cell">0</td>
+                                            <td class="mock-table-cell">1</td>
+                                            <td class="mock-table-cell"><span class="mock-status-esgotado">Esgotado - Pedir Urgente!</span></td>
+                                            <td class="mock-table-cell"><button class="mock-button !bg-[var(--danger-color)]">Repor</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mock-table-cell">PERIG004</td>
+                                            <td class="mock-table-cell">HyperX Cloud Alpha S</td>
+                                            <td class="mock-table-cell">2</td>
+                                            <td class="mock-table-cell">5</td>
+                                            <td class="mock-table-cell"><span class="mock-status-baixo-estoque">Baixo Estoque - Recom. Repos.</span></td>
+                                            <td class="mock-table-cell"><button class="mock-button !bg-[var(--warning-color)]">Repor</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div id="mockup-sales" class="mockup-content-pane hidden">
+                            <h3 class="text-xl font-bold text-[var(--text-color-default)] mb-4">Análise de Vendas (Mês)</h3>
+                            <div class="grid grid-cols-2 gap-3 mb-4">
+                                <div class="mock-dashboard-card">
+                                    <div class="value">R$ 15.000</div>
+                                    <div class="label">Vendas Brutas</div>
+                                </div>
+                                <div class="mock-dashboard-card">
+                                    <div class="value">35</div>
+                                    <div class="label">Total de Vendas</div>
+                                </div>
+                            </div>
+                            <h4 class="text-lg font-semibold text-[var(--text-color-default)] mb-2">Top 3 Produtos Vendidos</h4>
+                            <ul class="space-y-1 text-sm text-[var(--text-color-muted)]">
+                                <li class="flex justify-between p-1 bg-[var(--bg-lighter)] rounded"><span>Playstation 5 Pro</span> <span>5 un.</span></li>
+                                <li class="flex justify-between p-1 bg-[var(--bg-lighter)] rounded"><span>NVIDIA RTX 4090</span> <span>3 un.</span></li>
+                                <li class="flex justify-between p-1 bg-[var(--bg-lighter)] rounded"><span>HyperX Cloud Alpha S</span> <span>8 un.</span></li>
+                            </ul>
+                        </div>
+
+                        <div id="mockup-groups" class="mockup-content-pane hidden">
+                            <h3 class="text-xl font-bold text-[var(--text-color-default)] mb-4">Grupos de Mercadorias</h3>
+                            <div class="mockup-tabs">
+                                <button class="mockup-tab-button active-tab" data-tab="groups-list">Lista de Grupos</button>
+                                <button class="mockup-tab-button" data-tab="groups-add">Adicionar Grupo</button>
+                            </div>
+                            <div id="groups-list" class="mockup-tab-content active-tab-content overflow-x-auto">
+                                <table class="min-w-full border-collapse"> <thead class="mock-table-header">
+                                        <tr>
+                                            <th class="text-left">Nome do Grupo</th>
+                                            <th class="text-left">Visível</th>
+                                            <th class="text-left">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="mock-table-cell">Consoles e Jogos</td>
+                                            <td class="mock-table-cell"><i class="fas fa-check text-[var(--accent-green-primary)]"></i></td>
+                                            <td class="mock-table-cell flex space-x-2"><i class="fas fa-edit text-blue-400"></i><i class="fas fa-trash text-red-400"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mock-table-cell">Periféricos</td>
+                                            <td class="mock-table-cell"><i class="fas fa-check text-[var(--accent-green-primary)]"></i></td>
+                                            <td class="mock-table-cell flex space-x-2"><i class="fas fa-edit text-blue-400"></i><i class="fas fa-trash text-red-400"></i></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                             <div id="groups-add" class="mockup-tab-content">
+                                <form class="space-y-3">
+                                    <input type="text" placeholder="Nome do Novo Grupo" class="mock-input-field w-full">
+                                    <div class="flex items-center gap-2">
+                                        <input type="checkbox" checked class="h-4 w-4 rounded text-[var(--accent-green-primary)]">
+                                        <span class="text-sm text-[var(--text-color-muted)]">Exibir em filtros</span>
+                                    </div>
+                                    <button type="submit" class="mock-button w-full">Criar Grupo</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div id="mockup-coupons" class="mockup-content-pane hidden">
+                            <h3 class="text-xl font-bold text-[var(--text-color-default)] mb-4">Cupons e Promoções</h3>
+                            <div class="mockup-tabs">
+                                <button class="mockup-tab-button active-tab" data-tab="coupons-list">Cupons Ativos</button>
+                                <button class="mockup-tab-button" data-tab="coupons-add">Adicionar Cupom</button>
+                            </div>
+                            <div id="coupons-list" class="mockup-tab-content active-tab-content overflow-x-auto">
+                                <table class="min-w-full border-collapse"> <thead class="mock-table-header">
+                                        <tr>
+                                            <th class="text-left">Código</th>
+                                            <th class="text-left">Desconto</th>
+                                            <th class="text-left">Status</th>
+                                            <th class="text-left">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="mock-table-cell">PROMO10</td>
+                                            <td class="mock-table-cell">10% OFF</td>
+                                            <td class="mock-table-cell"><span class="mock-status-ok">Ativo</span></td>
+                                            <td class="mock-table-cell flex space-x-2"><i class="fas fa-edit text-blue-400"></i><i class="fas fa-trash text-red-400"></i></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                             <div id="coupons-add" class="mockup-tab-content">
+                                <form class="space-y-3">
+                                    <input type="text" placeholder="Código do Cupom" class="mock-input-field w-full">
+                                    <input type="number" placeholder="Valor Desconto (%)" class="mock-input-field w-full">
+                                    <div class="flex items-center gap-2">
+                                        <input type="checkbox" checked class="h-4 w-4 rounded text-[var(--accent-green-primary)]">
+                                        <span class="text-sm text-[var(--text-color-muted)]">Ativo</span>
+                                    </div>
+                                    <button type="submit" class="mock-button w-full">Criar Cupom</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div id="mockup-history" class="mockup-content-pane hidden">
+                            <h3 class="text-xl font-bold text-[var(--text-color-default)] mb-4">Histórico de Movimentações</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead class="mock-table-header">
+                                        <tr>
+                                            <th class="text-left">Data/Hora</th>
+                                            <th class="text-left">Tipo</th>
+                                            <th class="text-left">Descrição</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="mock-table-cell">08/06 14:00</td>
+                                            <td class="mock-table-cell">Saída</td>
+                                            <td class="mock-table-cell">Saída de 1 un. de "Playstation 5 Pro" (Venda).</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="mock-table-cell">07/06 10:30</td>
+                                            <td class="mock-table-cell">Entrada</td>
+                                            <td class="mock-table-cell">Entrada de 5 un. de "Mouse Gamer" (Cód: MOUSE001).</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="future" class="section-card animate-fade-in">
+            <h2 class="text-4xl font-bold text-[var(--accent-green-primary)] mb-6 text-center">O Futuro do JyStock: Expansão e Novas Funcionalidades</h2>
+            <p class="text-lg text-[var(--text-color-default)] leading-relaxed mb-8">
+                Nosso sistema está em constante evolução. Temos um roteiro ambicioso para o JyStock, com foco em expandir sua capacidade de atender a uma gama ainda maior de comércios e estabelecimentos de diferentes tamanhos. As futuras atualizações trarão funcionalidades que aprofundarão o controle e a gestão do seu negócio:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-2xl font-semibold text-[var(--text-color-default)] mb-4">Próximos Passos:</h3>
+                    <ul class="list-disc list-inside text-[var(--text-color-muted)] space-y-3">
+                        <li><i class="fas fa-balance-scale mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Tipos de Unidades Flexíveis: Suporte para diversas unidades de medida (kg, litro, metro, caixa, etc.), ideal para comércios variados.
+                        </li>
+                        <li><i class="fas fa-file-invoice-dollar mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Gestão Financeira: Módulos de Contas a Pagar e Contas a Receber para um controle financeiro completo e integrado.
+                        </li>
+                        <li><i class="fas fa-file-alt mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Documentos Fiscais: Integração com emissão de DANFEs e gestão de arquivos XML para conformidade fiscal.
+                        </li>
+                        <li><i class="fas fa-code-branch mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Multi-Filiais: Funcionalidade para junção e gerenciamento centralizado de estoque em diversas filiais.
+                        </li>
+                        <li><i class="fas fa-users-cog mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Controle de Usuários e Permissões: Cadastro de funcionários com diferentes níveis de acesso e permissões personalizadas.
+                        </li>
+                        <li><i class="fas fa-hand-holding-usd mr-2 text-[var(--accent-green-primary)]"></i> 
+                            Comissões por Vendedor: Controle de comissionamento de vendas para sua equipe.
+                        </li>
+                    </ul>
+                </div>
+                <div class="flex flex-col space-y-4">
+                    <h3 class="text-2xl font-semibold text-[var(--text-color-default)] mb-4">Prévia das Próximas Funções:</h3>
+                    
+                    <div class="mockup-tabs">
+                        <button class="mockup-tab-button active-tab" data-tab="future-mockup-units">Tipos de Unidades</button>
+                        <button class="mockup-tab-button" data-tab="future-mockup-financial">Financeiro</button>
+                        <button class="mockup-tab-button" data-tab="future-mockup-fiscal">Documentos Fiscais</button>
+                        <button class="mockup-tab-button" data-tab="future-mockup-multi-branch">Multi-Filiais</button>
+                        <button class="mockup-tab-button" data-tab="future-mockup-users">Usuários e Permissões</button>
+                        <button class="mockup-tab-button" data-tab="future-mockup-commissions">Comissões</button>
+                    </div>
+
+                    <div id="future-mockup-units" class="future-mockup-container active">
+                        <h4 class="future-mockup-header">Gerenciar Unidades de Medida</h4>
+                        <div class="future-mockup-content">
+                            <label class="block text-sm font-medium text-[var(--text-color-muted)]">Produto:</label>
+                            <input type="text" value="Cabo de Rede (Cat. 6)" class="mock-input-field w-full">
+                            <label class="block text-sm font-medium text-[var(--text-color-muted)] mt-2">Unidade Padrão:</label>
+                            <select class="mock-select-field w-full">
+                                <option>Metro (m)</option>
+                                <option>Unidade (un)</option>
+                                <option>Caixa (cx)</option>
+                            </select>
+                            <label class="block text-sm font-medium text-[var(--text-color-muted)] mt-2">Conversão (Opcional):</label>
+                            <input type="text" placeholder="1 Caixa = 305 Metros" class="mock-input-field w-full">
+                            <button class="mock-button w-full mt-3">Salvar</button>
+                        </div>
+                    </div>
+
+                    <div id="future-mockup-financial" class="future-mockup-container">
+                        <h4 class="future-mockup-header">Contas a Pagar e Receber</h4>
+                        <div class="future-mockup-content overflow-x-auto">
+                            <table class="future-mockup-table">
+                                <thead>
+                                    <tr><th>Tipo</th><th>Descrição</th><th>Valor</th><th>Vencimento</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Pagar</td><td>Aluguel Junho</td><td>R$ 2.500,00</td><td>10/06</td></tr>
+                                    <tr><td>Receber</td><td>Venda #1234 (Parcela)</td><td>R$ 499,90</td><td>15/06</td></tr>
+                                    <tr><td>Pagar</td><td>Salários (Mock)</td><td>R$ 7.000,00</td><td>05/07</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="flex justify-between mt-3">
+                                <button class="mock-button">Nova Conta a Pagar</button>
+                                <button class="mock-button">Nova Conta a Receber</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="future-mockup-fiscal" class="future-mockup-container">
+                        <h4 class="future-mockup-header">Emissão de DANFEs e XMLs</h4>
+                        <div class="future-mockup-content overflow-x-auto">
+                            <table class="future-mockup-table">
+                                <thead>
+                                    <tr><th>NF-e</th><th>Data</th><th>Valor</th><th>Ações</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>123.456</td><td>01/06</td><td>R$ 4.499,90</td><td><button class="mock-button">Ver DANFE</button></td></tr>
+                                    <tr><td>123.457</td><td>03/06</td><td>R$ 10.999,90</td><td><button class="mock-button">Download XML</button></td></tr>
+                                </tbody>
+                            </table>
+                            <button class="mock-button w-full mt-3">Emitir Nova NF-e</button>
+                        </div>
+                    </div>
+
+                     <div id="future-mockup-multi-branch" class="future-mockup-container">
+                        <h4 class="future-mockup-header">Gestão de Múltiplas Filiais</h4>
+                        <div class="future-mockup-content">
+                            <label class="block text-sm font-medium text-[var(--text-color-muted)]">Filial Atual:</label>
+                            <select class="mock-select-field w-full">
+                                <option>Matriz - SP</option>
+                                <option>Filial - RJ</option>
+                                <option>Filial - MG</option>
+                            </select>
+                            <label class="block text-sm font-medium text-[var(--text-color-muted)] mt-2">Estoque da Filial RJ:</label>
+                            <div class="p-2 bg-[var(--bg-lighter)] rounded-lg text-sm text-[var(--text-color-default)]">
+                                <p>Produto A: 15 un.</p>
+                                <p>Produto B: 8 un.</p>
+                            </div>
+                            <button class="mock-button w-full mt-3">Transferir Entre Filiais</button>
+                        </div>
+                    </div>
+
+                    <div id="future-mockup-users" class="future-mockup-container">
+                        <h4 class="future-mockup-header">Controle de Usuários e Permissões</h4>
+                        <div class="future-mockup-content overflow-x-auto">
+                            <table class="future-mockup-table">
+                                <thead>
+                                    <tr><th>Nome</th><th>Cargo</th><th>Permissões</th><th>Ações</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>João Silva</td><td>Gerente</td><td>Total</td><td><i class="fas fa-edit text-blue-400"></i></td></tr>
+                                    <tr><td>Maria Clara</td><td>Vendedora</td><td>Vendas, Estoque (Leitura)</td><td><i class="fas fa-edit text-blue-400"></i></td></tr>
+                                    <tr><td>Carlos Souza</td><td>Estoquista</td><td>Movimentações</td><td><i class="fas fa-edit text-blue-400"></i></td></tr>
+                                </tbody>
+                            </table>
+                            <button class="mock-button w-full mt-3">Adicionar Novo Usuário</button>
+                        </div>
+                    </div>
+
+                    <div id="future-mockup-commissions" class="future-mockup-container">
+                        <h4 class="future-mockup-header">Controle de Comissões por Vendedor</h4>
+                        <div class="future-mockup-content overflow-x-auto">
+                            <table class="future-mockup-table">
+                                <thead>
+                                    <tr><th>Vendedor</th><th>Vendas Mês</th><th>Comissão (%)</th><th>Total Comissão</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Vendedor 1</td><td>R$ 12.500,00</td><td>5%</td><td>R$ 625,00</td></tr>
+                                    <tr><td>Vendedor 2</td><td>R$ 8.000,00</td><td>5%</td><td>R$ 400,00</td></tr>
+                                </tbody>
+                            </table>
+                            <button class="mock-button w-full mt-3">Gerar Relatório de Comissões</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-lg text-[var(--text-color-default)] leading-relaxed mt-8">
+                Estamos comprometidos em tornar o JyStock a ferramenta de gestão de estoque mais completa e adaptável do mercado, crescendo junto com o seu negócio.
+            </p>
+        </section>
+
+        <section id="pricing" class="section-card animate-fade-in">
+            <h2 class="text-4xl font-bold text-[var(--accent-green-primary)] mb-8 text-center">Planos de Mensalidade Flexíveis</h2>
+            <p class="text-lg text-[var(--text-color-muted)] text-center mb-10">
+                Escolha o plano que melhor se adapta ao tamanho e às necessidades do seu estabelecimento.
+            </p>
+            <div class="flex justify-center mb-8">
+                <div class="contact-dropdown">
+                    <button onclick="toggleContactDropdown()" class="btn btn-secondary px-8 py-3 text-lg">
+                        <i class="fas fa-headset mr-2"></i> Entrar em Contato
+                    </button>
+                    <div id="contactDropdownContent" class="contact-dropdown-content">
+                        <a href="https://wa.me/5518999999999" target="_blank" class="flex items-center"><i class="fab fa-whatsapp mr-2"></i> WhatsApp</a>
+                        <a href="tel:+5518999999999" class="flex items-center"><i class="fas fa-phone mr-2"></i> Celular</a>
+                        <a href="mailto:contato@jystock.com.br" class="flex items-center"><i class="fas fa-envelope mr-2"></i> Email</a>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="pricing-card bg-[var(--bg-medium)] p-6 rounded-lg shadow-lg border border-[var(--border-color)] text-center transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-2xl font-bold text-[var(--text-color-default)] mb-4">Iniciante</h3>
+                    <p class="text-[var(--text-color-muted)] mb-4">Ideal para pequenos negócios com foco em controle de estoque essencial.</p>
+                    <div class="price text-[var(--accent-green-primary)] text-5xl font-extrabold mb-2">R$250</div>
+                    <p class="frequency text-[var(--text-color-muted)] text-sm mb-6">/mês</p>
+                    <ul class="text-sm text-[var(--text-color-default)] text-left mb-6 space-y-2">
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Cadastro de até 500 Mercadorias</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> 1 Filial</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Usuário Único</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Funções Essenciais</li>
+                    </ul>
+                    <button class="btn btn-primary w-full">Selecionar Plano</button>
+                </div>
+
+                <div class="pricing-card bg-[var(--bg-medium)] p-6 rounded-lg shadow-lg border border-[var(--border-color)] text-center transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-2xl font-bold text-[var(--text-color-default)] mb-4">Pequeno Negócio</h3>
+                    <p class="text-[var(--text-color-muted)] mb-4">Para negócios em crescimento que precisam de mais recursos.</p>
+                    <div class="price text-[var(--accent-green-primary)] text-5xl font-extrabold mb-2">R$500</div>
+                    <p class="frequency text-[var(--text-color-muted)] text-sm mb-6">/mês</p>
+                    <ul class="text-sm text-[var(--text-color-default)] text-left mb-6 space-y-2">
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Cadastro de até 1.000 Mercadorias</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Até 2 Filiais</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Até 3 Usuários</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Funções Essenciais +</li>
+                    </ul>
+                    <button class="btn btn-primary w-full">Selecionar Plano</button>
+                </div>
+                
+                <div class="pricing-card bg-[var(--bg-medium)] p-6 rounded-lg shadow-lg border border-[var(--border-color)] text-center transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-2xl font-bold text-[var(--text-color-default)] mb-4">Essencial</h3>
+                    <p class="text-[var(--text-color-muted)] mb-4">Ideal para o controle completo de pequenas e médias empresas.</p>
+                    <div class="price text-[var(--accent-green-primary)] text-5xl font-extrabold mb-2">R$750</div>
+                    <p class="frequency text-[var(--text-color-muted)] text-sm mb-6">/mês</p>
+                    <ul class="text-sm text-[var(--text-color-default)] text-left mb-6 space-y-2">
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Cadastro de até 2.500 Mercadorias</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Até 3 Filiais</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Até 5 Usuários</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Relatórios Avançados</li>
+                    </ul>
+                    <button class="btn btn-primary w-full">Selecionar Plano</button>
+                </div>
+
+                <div class="pricing-card bg-[var(--bg-medium)] p-6 rounded-lg shadow-lg border border-[var(--border-color)] text-center transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-2xl font-bold text-[var(--text-color-default)] mb-4">Crescimento</h3>
+                    <p class="text-[var(--text-color-muted)] mb-4">Para empresas em expansão que precisam de maior capacidade.</p>
+                    <div class="price text-[var(--accent-green-primary)] text-5xl font-extrabold mb-2">R$1000</div>
+                    <p class="frequency text-[var(--text-color-muted)] text-sm mb-6">/mês</p>
+                    <ul class="text-sm text-[var(--text-color-default)] text-left mb-6 space-y-2">
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Cadastro de até 5.000 Mercadorias</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Até 5 Filiais</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Até 10 Usuários</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Módulos Financeiros (Contas a Pagar/Receber - Preview)</li>
+                    </ul>
+                    <button class="btn btn-primary w-full">Selecionar Plano</button>
+                </div>
+
+                <div class="pricing-card bg-[var(--bg-medium)] p-6 rounded-lg shadow-lg border border-[var(--border-color)] text-center transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-2xl font-bold text-[var(--text-color-default)] mb-4">Pro</h3>
+                    <p class="text-[var(--text-color-muted)] mb-4">Solução completa para médias empresas com diversas filiais.</p>
+                    <div class="price text-[var(--accent-green-primary)] text-5xl font-extrabold mb-2">R$1500</div>
+                    <p class="frequency text-[var(--text-color-muted)] text-sm mb-6">/mês</p>
+                    <ul class="text-sm text-[var(--text-color-default)] text-left mb-6 space-y-2">
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Cadastro Ilimitado de Mercadorias</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Até 10 Filiais</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Até 20 Usuários</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Integração Fiscal (DANFE/XML - Preview)</li>
+                    </ul>
+                    <button class="btn btn-primary w-full">Selecionar Plano</button>
+                </div>
+
+                 <div class="pricing-card bg-[var(--bg-medium)] p-6 rounded-lg shadow-lg border border-[var(--border-color)] text-center transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-2xl font-bold text-[var(--text-color-default)] mb-4">Premium</h3>
+                    <p class="text-[var(--text-color-muted)] mb-4">Recursos avançados para grandes volumes de dados e operações.</p>
+                    <div class="price text-[var(--accent-green-primary)] text-5xl font-extrabold mb-2">R$2000</div>
+                    <p class="frequency text-[var(--text-color-muted)] text-sm mb-6">/mês</p>
+                    <ul class="text-sm text-[var(--text-color-default)] text-left mb-6 space-y-2">
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Todos os recursos do Pro</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Até 20 Filiais</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Até 50 Usuários</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Multi-Filiais Avançado (Preview)</li>
+                    </ul>
+                    <button class="btn btn-primary w-full">Selecionar Plano</button>
+                </div>
+
+                <div class="pricing-card bg-[var(--bg-medium)] p-6 rounded-lg shadow-lg border border-[var(--border-color)] text-center transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-2xl font-bold text-[var(--text-color-default)] mb-4">Corporativo</h3>
+                    <p class="text-[var(--text-color-muted)] mb-4">Para grandes corporações com necessidades de controle total.</p>
+                    <div class="price text-[var(--accent-green-primary)] text-5xl font-extrabold mb-2">R$2500</div>
+                    <p class="frequency text-[var(--text-color-muted)] text-sm mb-6">/mês</p>
+                    <ul class="text-sm text-[var(--text-color-default)] text-left mb-6 space-y-2">
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Todos os recursos do Premium</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Mais de 20 Filiais (orçamento específico)</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Usuários Ilimitados</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Controle de Comissões (Preview)</li>
+                    </ul>
+                    <button class="btn btn-primary w-full">Selecionar Plano</button>
+                </div>
+
+                <div class="pricing-card bg-[var(--bg-medium)] p-6 rounded-lg shadow-lg border border-[var(--border-color)] text-center transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-2xl font-bold text-[var(--text-color-default)] mb-4">Enterprise</h3>
+                    <p class="text-[var(--text-color-muted)] mb-4">Solução personalizada para as maiores e mais complexas operações.</p>
+                    <div class="price text-[var(--accent-green-primary)] text-5xl font-extrabold mb-2">Orçamento</div>
+                    <p class="frequency text-[var(--text-color-muted)] text-sm mb-6">Sob consulta</p>
+                    <ul class="text-sm text-[var(--text-color-default)] text-left mb-6 space-y-2">
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Todos os recursos avançados</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Personalização de módulos</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Integrações personalizadas</li>
+                        <li><i class="fas fa-check-circle mr-2 text-[var(--accent-green-primary)]"></i> Suporte dedicado 24/7 e SLA</li>
+                    </ul>
+                    <button class="btn btn-primary w-full" onclick="openRegistrationModal('Enterprise', 'custom')">Entrar em Contato</button>
+                </div>
+            </div>
+            <p class="text-center text-lg text-[var(--text-color-default)] mt-10">
+                Oferecemos um período de 30 dias grátis de teste para todos os planos! Durante esse período, o sistema será instalado e implantado, e você terá acesso total para testar suas funcionalidades e aprender a usá-lo com nosso suporte.
+            </p>
+        </section>
+
+        <section id="support" class="section-card animate-fade-in">
+            <h2 class="text-4xl font-bold text-[var(--accent-green-primary)] mb-6 text-center">Suporte e Dúvidas Frequentes</h2>
+            <p class="text-lg text-[var(--text-color-muted)] text-center mb-8">
+                Encontre respostas para suas perguntas ou fale diretamente com nossa equipe de suporte.
+            </p>
+
+            <h3 class="text-2xl font-semibold text-[var(--text-color-default)] mb-4">Dúvidas Frequentes (FAQ)</h3>
+            <div class="space-y-4">
+                <div class="faq-item active">
+                    <div class="faq-question">
+                        <span>Como posso cadastrar uma nova mercadoria?</span>
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Para cadastrar uma nova mercadoria, navegue até a seção "Inventário" no menu lateral e clique na aba "Adicionar Novo". Preencha os campos obrigatórios como nome, código e grupo, e clique em "Adicionar". É simples e rápido!
+                    </div>
+                </div>
+                <div class="faq-item active">
+                    <div class="faq-question">
+                        <span>O sistema funciona em dispositivos móveis?</span>
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Sim, o JyStock possui um design responsivo e pode ser acessado em diversos dispositivos, incluindo tablets e smartphones, proporcionando flexibilidade para gerenciar seu estoque de qualquer lugar.
+                    </div>
+                </div>
+                <div class="faq-item active">
+                    <div class="faq-question">
+                        <span>Posso importar meus dados de estoque existentes?</span>
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Atualmente, a importação de dados em massa está sendo desenvolvida como uma futura melhoria. No momento, o cadastro é feito item a item, mas nossa equipe pode auxiliar na migração inicial para planos empresariais.
+                    </div>
+                </div>
+                 <div class="faq-item active">
+                    <div class="faq-question">
+                        <span>Como funcionam os avisos de baixo estoque?</span>
+                        <i class="fas fa-chevron-up"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Você pode definir um "Estoque Mínimo" para cada mercadoria. Quando o nível de estoque atingir ou ficar abaixo desse limite, o sistema automaticamente gera um aviso na seção "Mercadorias em Falta" e em suas notificações, alertando para a necessidade de reposição.
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-center text-lg text-[var(--text-color-default)] mt-10">
+                Ainda não encontrou o que procura? Fale diretamente com nossa equipe de suporte.
+            </p>
+             <div class="flex justify-center mt-6">
+                <div class="contact-dropdown">
+                    <button onclick="toggleContactDropdown()" class="btn btn-secondary px-8 py-3 text-lg">
+                        <i class="fas fa-headset mr-2"></i> Entrar em Contato
+                    </button>
+                    <div id="contactDropdownContentSupport" class="contact-dropdown-content">
+                        <a href="https://wa.me/5518999999999" target="_blank" class="flex items-center"><i class="fab fa-whatsapp mr-2"></i> WhatsApp</a>
+                        <a href="tel:+5518999999999" class="flex items-center"><i class="fas fa-phone mr-2"></i> Celular</a>
+                        <a href="mailto:contato@jystock.com.br" class="flex items-center"><i class="fas fa-envelope mr-2"></i> Email</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-12">
+        <div class="container">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div class="text-sm">© 2025 JyStock. Todos os direitos reservados.</div>
+                <div class="flex space-x-6">
+                    <a href="https://instagram.com" target="_blank" title="Instagram"><i class="fab fa-instagram text-2xl"></i></a>
+                    <a href="https://youtube.com" target="_blank" title="YouTube"><i class="fab fa-youtube text-2xl"></i></a>
+                    <a href="https://facebook.com" target="_blank" title="Facebook"><i class="fab fa-facebook text-2xl"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('nav a').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    // Check if it's an internal hash link or an external page link
+                    if (this.getAttribute('href').startsWith('#')) {
+                        e.preventDefault();
+                        document.querySelector(this.getAttribute('href')).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                    // For external links like login.html, let the default behavior happen
+                });
+            });
+
+            window.scrollToElement = (id) => {
+                document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+            };
+
+            // Intersection Observer for Section Animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Stop observing once visible
+                    }
+                });
+            }, {
+                threshold: 0.2, // Trigger when 20% of the element is visible
+                rootMargin: '0px 0px -50px 0px' // Start animation slightly before it's fully in view
+            });
+
+            document.querySelectorAll('.section-card.animate-fade-in').forEach(card => {
+                observer.observe(card);
+            });
+
+            // Hero section animation
+            const heroTitle = document.querySelector('#hero h1');
+            const heroSubtitle = document.querySelector('#hero p');
+            const heroButton = document.querySelector('#hero .btn');
+
+            setTimeout(() => {
+                heroTitle.classList.remove('animate-fade-in-up');
+                heroSubtitle.classList.remove('animate-fade-in-up');
+                heroButton.classList.remove('animate-fade-in-up');
+            }, 10); // Trigger animation by removing initial classes after a tiny delay
+
+            // Custom animations for hero section elements
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes fadeInUp {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .animate-fade-in-up {
+                    animation: fadeInUp 0.6s ease-out forwards;
+                }
+                .animation-delay-300 { animation-delay: 0.3s; }
+                .animation-delay-600 { animation-delay: 0.6s; }
+            `;
+            document.head.appendChild(style);
+
+            // --- Mockup System Functionality (Current Features) ---
+            const mockupNavItems = document.querySelectorAll('.mockup-nav-item');
+            const mockupContentPanes = document.querySelectorAll('.mockup-content-pane');
+            const mockupPageTitle = document.getElementById('mockupPageTitle');
+
+            mockupNavItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetPaneId = `mockup-${this.dataset.mockupTarget}`;
+
+                    mockupNavItems.forEach(nav => {
+                        nav.classList.remove('text-[var(--accent-green-primary)]', 'font-semibold');
+                        nav.classList.add('text-[var(--text-color-default)]');
+                    });
+                    this.classList.add('text-[var(--accent-green-primary)]', 'font-semibold');
+                    this.classList.remove('text-[var(--text-color-default)]');
+
+                    mockupContentPanes.forEach(pane => {
+                        pane.classList.add('hidden');
+                        pane.classList.remove('active-mockup-pane');
+                    });
+                    document.getElementById(targetPaneId).classList.remove('hidden');
+                    document.getElementById(targetPaneId).classList.add('active-mockup-pane');
+
+                    // Reset tabs for the newly active pane
+                    const activePane = document.getElementById(targetPaneId);
+                    const firstTabButton = activePane.querySelector('.mockup-tabs .mockup-tab-button');
+                    const firstTabContent = activePane.querySelector('.mockup-tabs ~ .mockup-tab-content'); // Select content directly after tabs
+
+                    if (firstTabButton && firstTabContent) {
+                        activePane.querySelectorAll('.mockup-tabs .mockup-tab-button').forEach(btn => btn.classList.remove('active-tab'));
+                        activePane.querySelectorAll('.mockup-tabs ~ .mockup-tab-content').forEach(content => content.classList.remove('active-tab-content'));
+                        firstTabButton.classList.add('active-tab');
+                        firstTabContent.classList.add('active-tab-content');
+                    }
+
+
+                    // Update mockup title
+                    mockupPageTitle.textContent = this.textContent.trim();
+                });
+            });
+
+            // Mockup Tab Functionality
+            document.querySelectorAll('.mockup-tabs').forEach(tabContainer => {
+                tabContainer.addEventListener('click', function(e) {
+                    const clickedButton = e.target.closest('.mockup-tab-button');
+                    if (!clickedButton) return;
+
+                    // Deactivate all sibling buttons
+                    this.querySelectorAll('.mockup-tab-button').forEach(btn => btn.classList.remove('active-tab'));
+                    // Activate the clicked button
+                    clickedButton.classList.add('active-tab');
+
+                    // Get the parent pane to only affect its children tabs
+                    const parentPane = clickedButton.closest('.mockup-content-pane') || clickedButton.closest('.future-mockup-container');
+                    if (!parentPane) return;
+
+                    // Hide all tab contents within this pane
+                    parentPane.querySelectorAll('.mockup-tab-content').forEach(content => content.classList.remove('active-tab-content'));
+                    // Show the target tab content
+                    const targetTabId = clickedButton.dataset.tab;
+                    const targetTabContent = parentPane.querySelector(`#${targetTabId}`);
+                    if (targetTabContent) {
+                        targetTabContent.classList.add('active-tab-content');
+                    }
+                });
+            });
+
+            // --- Future Features Previews (Separate Logic) ---
+            const futureFeatureTabs = document.querySelectorAll('#future .mockup-tabs .mockup-tab-button');
+            const futureMockupContainers = document.querySelectorAll('#future .future-mockup-container');
+
+            futureFeatureTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Deactivate all tabs
+                    futureFeatureTabs.forEach(t => t.classList.remove('active-tab'));
+                    // Activate clicked tab
+                    this.classList.add('active-tab');
+
+                    // Hide all mockup containers
+                    futureMockupContainers.forEach(container => container.classList.remove('active'));
+                    // Show the corresponding mockup container
+                    const targetId = this.dataset.tab;
+                    const targetContainer = document.getElementById(targetId);
+                    if (targetContainer) {
+                        targetContainer.classList.add('active');
+                    }
+                });
+            });
+
+
+            // --- Contact Dropdown ---
+            window.toggleContactDropdown = function() {
+                const dropdownContent = event.currentTarget.nextElementSibling; // Get the next sibling, which is the dropdown content
+                dropdownContent.classList.toggle("show");
+            };
+
+            window.onclick = function(event) {
+                // Close dropdown if clicked outside the button or dropdown content
+                if (!event.target.matches('.btn-secondary') && !event.target.closest('.contact-dropdown-content')) {
+                    const dropdowns = document.getElementsByClassName("contact-dropdown-content");
+                    for (let i = 0; i < dropdowns.length; i++) {
+                        const openDropdown = dropdowns[i];
+                        if (openDropdown.classList.contains('show')) {
+                            openDropdown.classList.remove('show');
+                        }
+                    }
+                }
+            };
+            
+            // FAQ Accordion - Removed collapse/expand functionality
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.add('active'); // Ensure items are always active (expanded)
+            });
+        });
+    </script>
+</body>
+</html>
