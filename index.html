@@ -43,7 +43,7 @@
         html {
             font-size: var(--base-font-size);
         }
-        
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
@@ -448,7 +448,7 @@
         .mockup-tab-content.active-tab-content {
             display: block;
         }
-        
+
         /* Future Preview Mockups specific styles */
         .future-mockup-container {
             background-color: var(--bg-medium);
@@ -613,6 +613,25 @@
                 grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             }
         }
+
+        /*
+        * Correção para desktop:
+        * 1. O menu de navegação para desktop (nav) deve ser visível em telas maiores.
+        * 2. O botão de menu mobile e a sobreposição devem ser ocultados em telas maiores.
+        */
+        @media (min-width: 769px) {
+            .header-main nav {
+                display: block;
+            }
+            .mobile-nav-toggle,
+            .mobile-menu-overlay,
+            .mobile-menu {
+                display: none;
+            }
+            .header-main {
+                flex-direction: row;
+            }
+        }
     </style>
 </head>
 <body>
@@ -642,8 +661,8 @@
         </nav>
     </header>
 
-    <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
-    <div id="mobile-menu" class="mobile-menu">
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay md:hidden"></div>
+    <div id="mobile-menu" class="mobile-menu md:hidden">
         <button class="text-3xl text-[var(--text-color-default)] self-end" id="mobile-menu-close-btn">
             <i class="fas fa-times"></i>
         </button>
