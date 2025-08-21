@@ -9,17 +9,17 @@
     <style>
         /* Base Cores Jython (Padrão) */
         :root {
-            --bg-dark: #081409; /* Preto esverdeado profundo */
-            --bg-medium: #0d1b0e; /* Fundo principal escuro */
-            --bg-light: #1a2e1b; /* Fundo de cards, sidebar, header */
-            --bg-lighter: #243e25; /* Fundo de hover, tabelas (alternado) */
-            --text-green-light: #d1f7d6; /* Texto claro */
-            --text-green-medium: #b7f5bb; /* Texto médio */
-            --text-green-dark: #7fcf85; /* Texto mais escuro (para labels/placeholders) */
-            --accent-green-primary: #63d471; /* Cor de destaque principal (botões, links) */
-            --accent-green-secondary: #233329; /* Cor de destaque secundária (degrades, bordas internas) */
-            --border-color: #3a5c3b; /* Cor de borda */
-            --shadow-color: rgba(0, 0, 0, 0.5); /* Sombra mais forte para dark mode */
+            --bg-dark: #081409;
+            --bg-medium: #0d1b0e;
+            --bg-light: #1a2e1b;
+            --bg-lighter: #243e25;
+            --text-green-light: #d1f7d6;
+            --text-green-medium: #b7f5bb;
+            --text-green-dark: #7fcf85;
+            --accent-green-primary: #63d471;
+            --accent-green-secondary: #233329;
+            --border-color: #3a5c3b;
+            --shadow-color: rgba(0, 0, 0, 0.5);
             --text-color-default: var(--text-green-light);
             --text-color-muted: var(--text-green-dark);
             --sidebar-icon-color: var(--text-green-medium);
@@ -56,9 +56,9 @@
             --image-placeholder-icon: var(--text-green-dark);
 
             /* Personalization Defaults */
-            --base-font-size: 16px; /* Medium */
-            --table-padding: 1rem 1.5rem; /* Comfortable */
-            --list-item-padding: 0.75rem 1rem; /* Comfortable */
+            --base-font-size: 16px;
+            --table-padding: 1rem 1.5rem;
+            --list-item-padding: 0.75rem 1rem;
         }
         html {
             font-size: var(--base-font-size);
@@ -247,32 +247,32 @@
             --warning-color: #cca400;
         }
 
-        html[data-theme="dark_monochromatic_blue"] { /* Black and Blue */
+        html[data-theme="dark_monochromatic_blue"] {
             --bg-dark: #000000; 
             --bg-medium: #1c1c1e; 
             --bg-light: #2c2c2e;  
             --bg-lighter: #3a3a3c;
             --text-color-default: #f0f0f5; 
             --text-color-muted: #a0a0a5;   
-            --accent-green-primary: #0A84FF; /* iOS Blue Dark Mode */
-            --accent-green-secondary: #3498DB; /* Lighter Blue */
-            --border-color: #003E7E; /* Dark Blue Border */
-            --shadow-color: rgba(10, 132, 255, 0.2); /* Bluish Shadow */
+            --accent-green-primary: #0A84FF;
+            --accent-green-secondary: #3498DB;
+            --border-color: #003E7E;
+            --shadow-color: rgba(10, 132, 255, 0.2);
             --sidebar-icon-color: #0A84FF;
             --scrollbar-bg: var(--bg-medium);
             --scrollbar-thumb: var(--accent-green-primary);
             --scrollbar-thumb-hover: var(--accent-green-secondary);
         }
-         html[data-theme="dark_monochromatic_red"] { /* Black and Red */
+         html[data-theme="dark_monochromatic_red"] {
             --bg-dark: #000000;
             --bg-medium: #1c1c1e;
             --bg-light: #2c2c2e;
             --bg-lighter: #3a3a3c;
             --text-color-default: #f0f0f5;
             --text-color-muted: #a0a0a5;
-            --accent-green-primary: #FF3B30; /* iOS Red */
-            --accent-green-secondary: #D90429; /* Darker Red */
-            --border-color: #5A0000; /* Dark Red Border */
+            --accent-green-primary: #FF3B30;
+            --accent-green-secondary: #D90429;
+            --border-color: #5A0000;
             --shadow-color: rgba(255, 59, 48, 0.2);
             --sidebar-icon-color: #FF3B30;
             --scrollbar-bg: var(--bg-medium);
@@ -323,7 +323,7 @@
 
         /* Sidebar Collapsed State */
         .sidebar.collapsed {
-            width: 78px; /* Slightly wider for centered icons */
+            width: 78px;
         }
         .sidebar.collapsed .nav-text,
         .sidebar.collapsed .user-info-text,
@@ -383,7 +383,7 @@
         /* Main Content Area */
         .main-content {
             margin-left: 260px;
-            transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out; /* Add width to transition */
+            transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
             padding: 1.5rem;
             flex-grow: 1;
             display: flex;
@@ -425,7 +425,7 @@
             width: 40px;
             height: 40px;
             object-fit: cover;
-            border-radius: 0.375rem; /* rounded-md */
+            border-radius: 0.375rem;
             background-color: var(--image-placeholder-bg);
             color: var(--image-placeholder-icon);
             display: inline-flex;
@@ -433,13 +433,38 @@
             justify-content: center;
             font-size: 1.25rem;
         }
+        
+        .product-card {
+            background-color: var(--bg-lighter);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+        .product-card-title {
+            font-weight: bold;
+            color: var(--text-color-default);
+        }
+        .product-card-detail {
+            font-size: 0.875rem;
+            color: var(--text-color-muted);
+        }
+        .product-card-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
 
 
         /* Tables */
         .table-header th {
             background-color: var(--bg-lighter);
             color: var(--text-color-muted);
-            font-weight: 600; /* Semibold */
+            font-weight: 600;
             padding: var(--table-padding);
             border-bottom: 2px solid var(--border-color);
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, padding 0.2s ease;
@@ -481,9 +506,8 @@
             background-color: var(--bg-medium);
             color: var(--text-color-default);
         }
-        /* Custom styles for date input */
         input[type="date"] {
-            color-scheme: dark; /* Force dark calendar for dark themes */
+            color-scheme: dark;
             background-color: var(--bg-dark);
             border: 1px solid var(--border-color);
             color: var(--text-color-default);
@@ -493,14 +517,14 @@
             width: 100%;
         }
         html[data-theme="light_monochromatic"] input[type="date"] {
-            color-scheme: light; /* Force light calendar for light themes */
+            color-scheme: light;
         }
         input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(0.8); /* Invert icon color for dark themes */
+            filter: invert(0.8);
             cursor: pointer;
         }
         html[data-theme="light_monochromatic"] input[type="date"]::-webkit-calendar-picker-indicator {
-             filter: none; /* Reset icon color for light themes */
+             filter: none;
         }
 
 
@@ -596,9 +620,9 @@
             position: relative;
         }
         .notification-badge {
-            background-color: #e53e3e; /* red-600 */
+            background-color: #e53e3e;
             color: white;
-            border-radius: 9999px; /* pill shape */
+            border-radius: 9999px;
             padding: 2px 6px;
             font-size: 0.75rem;
             font-weight: bold;
@@ -626,7 +650,7 @@
             .sidebar {
                 transform: translateX(-100%);
                 box-shadow: none;
-                width: 260px; /* Sidebar full width on mobile */
+                width: 260px;
             }
              .sidebar.collapsed {
                  transform: translateX(-100%);
@@ -644,7 +668,7 @@
                 display: block;
             }
             #toggleSidebar {
-                 display: none; /* Hide desktop toggle on mobile */
+                 display: none;
             }
             .header-main {
                 padding: 1rem;
@@ -654,13 +678,13 @@
                 gap: 0.5rem;
             }
             .header-main input[type="text"] {
-                width: 120px; /* Adjust search bar width on mobile */
+                width: 120px;
             }
             .content-section {
                 padding: 1rem;
             }
             .content-section .grid {
-                 grid-template-columns: 1fr !important; /* Force single column on mobile */
+                 grid-template-columns: 1fr !important;
             }
             .table-header th, .table-cell {
                 padding: 0.75rem; 
@@ -671,7 +695,32 @@
                 height: 30px;
                 font-size: 1rem;
             }
+            /* Mobile - show search button, hide input */
+            .search-input-container input {
+                display: none;
+            }
+            .search-input-container.active input {
+                display: block;
+            }
+            .search-input-container .search-icon {
+                 display: block;
+            }
+            .search-input-container.active .search-icon {
+                display: none;
+            }
+             .search-input-container {
+                position: relative;
+                width: auto;
+            }
         }
+        
+        @media (max-width: 480px) {
+            .product-card {
+                 flex-direction: column;
+                 align-items: flex-start;
+            }
+        }
+
 
         .custom-scrollbar::-webkit-scrollbar { width: 8px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: var(--bg-dark); }
@@ -866,13 +915,13 @@
         /* Sidebar Toggle Button specific styles for collapsed state, mirroring ref2.PNG */
         .sidebar.collapsed #toggleSidebar {
             position: absolute;
-            right: -16px; /* Adjust as needed to position it outside */
+            right: -16px;
             top: 50%;
             transform: translateY(-50%) rotate(180deg);
-            background-color: var(--bg-light); /* Match background of the main content */
+            background-color: var(--bg-light);
             border: 1px solid var(--border-color);
             box-shadow: 0 2px 5px var(--shadow-color);
-            z-index: 60; /* Ensure it's above other elements if needed */
+            z-index: 60;
         }
 
         .sidebar:not(.collapsed) #toggleSidebar {
@@ -885,39 +934,39 @@
             box-shadow: none;
         }
         .sidebar.collapsed .logo-container {
-            min-height: 65px; /* Ensure height for icon centering */
+            min-height: 65px;
             align-items: center;
             padding: 0;
         }
         .sidebar.collapsed .jystock-logo-svg {
-            margin-right: 0; /* Remove margin when text is hidden */
+            margin-right: 0;
         }
         .sidebar.collapsed .logo-link {
-            justify-content: center; /* Center the icon */
+            justify-content: center;
             width: 100%;
         }
         .sidebar.collapsed .menu-item i,
         .sidebar.collapsed .sub-menu-item i {
-            display: block; /* Ensure icon is visible and takes up space */
+            display: block;
             margin-right: 0;
-            width: auto; /* Adjust to fit icon only */
+            width: auto;
             text-align: center;
         }
         .sidebar.collapsed .menu-item,
         .sidebar.collapsed .sub-menu-item {
-            display: flex; /* Ensure flex for centering */
-            flex-direction: column; /* Stack icon and hidden text */
-            align-items: center; /* Center items horizontally */
-            padding: 0.75rem 0.5rem; /* Adjust padding for smaller items */
-            height: 60px; /* Give it a fixed height for consistency */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.75rem 0.5rem;
+            height: 60px;
             justify-content: center;
         }
         .sidebar.collapsed .nav-item-active {
-            border-left: none; /* Remove left border */
-            border-right: 4px solid var(--accent-green-primary); /* Add right border */
+            border-left: none;
+            border-right: 4px solid var(--accent-green-primary);
         }
         .sidebar.collapsed .menu-item .nav-text {
-             position: absolute; /* Hide text but keep space for tooltip */
+             position: absolute;
              opacity: 0;
              pointer-events: none;
         }
@@ -929,7 +978,7 @@
             padding: 0.25rem 0.5rem;
             border-radius: 0.25rem;
             position: absolute;
-            left: 70px; /* Position next to the icon */
+            left: 70px;
             z-index: 70;
             pointer-events: auto;
         }
@@ -1055,7 +1104,7 @@
         </div>
     </div>
     
-    <button id="mobileMenuBtn" class="md:hidden p-3 bg-[var(--bg-light)] text-[var(--text-color-default)] fixed top-4 left-4 z-[60] rounded-md shadow-lg focus:outline-none active:bg-[var(--bg-lighter)]">
+    <button id="mobileMenuBtn" class="md:hidden p-3 bg-[var(--bg-light)] text-[var(--text-color-default)] fixed top-4 left-4 z-[60] rounded-full shadow-lg focus:outline-none active:bg-[var(--bg-lighter)]">
         <i class="fas fa-bars text-xl"></i>
     </button>
 
@@ -1063,10 +1112,11 @@
         <header class="header-main p-4 mb-6 flex justify-between items-center sticky top-0 z-40 backdrop-blur-sm bg-opacity-80">
             <h1 id="pageTitle" class="text-2xl font-bold text-[var(--text-color-default)]">Dashboard</h1>
             <div class="flex items-center space-x-4">
-                <div class="relative hidden md:block">
-                    <input type="text" placeholder="Buscar..." 
+                <div class="relative search-input-container">
+                     <button id="search-toggle" class="md:hidden p-2 text-[var(--text-color-muted)] hover:text-[var(--text-color-default)] search-icon"><i class="fas fa-search"></i></button>
+                     <input type="text" placeholder="Buscar..." 
                            class="input-field pl-10 pr-4 py-2 focus:ring-2 focus:ring-[var(--accent-green-primary)] !w-auto">
-                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-color-muted)]"></i>
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-color-muted)] hidden md:block"></i>
                 </div>
                 <div class="relative">
                     <button id="notificationBell" class="p-2 text-[var(--text-color-muted)] hover:text-[var(--text-color-default)] transition text-xl relative">
@@ -1074,8 +1124,8 @@
                         <span id="notificationBellBadge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center hidden">3</span>
                     </button>
                     <div id="notificationsModal" class="notifications-dropdown">
-                        <div class="notifications-dropdown-header">Notificações</div>
-                        <ul id="notificationsList" class="notifications-dropdown-list custom-scrollbar">
+                        <div class="p-4 font-semibold text-lg border-b border-[var(--border-color)]">Notificações</div>
+                        <ul id="notificationsList" class="notifications-dropdown-list custom-scrollbar py-2 max-h-[300px] overflow-y-auto">
                         </ul>
                         <div class="p-2 text-center border-t border-[var(--border-color)]">
                             <a href="#" onclick="event.preventDefault(); document.querySelector('.menu-item[data-target-content=history-content]').click();" class="text-sm text-[var(--accent-green-primary)] hover:underline">Ver todas</a>
@@ -1200,7 +1250,7 @@
                 </div>
                 
                 <div class="overflow-hidden">
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto hidden md:block">
                          <table class="min-w-full table-auto">
                             <thead class="table-header">
                                 <tr>
@@ -1219,6 +1269,8 @@
                             </tbody>
                         </table>
                     </div>
+                    <div id="inventoryCardView" class="grid grid-cols-1 gap-4 md:hidden"></div>
+
                      <div id="paginationContainer" class="bg-[var(--bg-lighter)] px-6 py-3 flex items-center justify-between border-t border-[var(--border-color)]">
                     </div>
                 </div>
@@ -1366,7 +1418,7 @@
                         <label for="historyDateStart" class="block text-sm font-medium text-[var(--text-color-muted)] mb-1">Período:</label>
                         <div class="flex items-center gap-2">
                            <input type="date" id="historyDateStart" class="input-field">
-                           <span>até</span>
+                           <span class="text-sm">até</span>
                            <input type="date" id="historyDateEnd" class="input-field">
                         </div>
                     </div>
@@ -2012,7 +2064,7 @@
 </body>
 </html>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+   document.addEventListener('DOMContentLoaded', () => {
     // Mock Data
     let mockProducts = [
         { id: 'CONS001', name: 'Playstation 5 Pro', group: 'Consoles e Jogos', stock: 10, minStock: 3, price: 4499.90, cost: 3800.00, addedDate: '2024-01-15T10:00:00Z', imageUrl: '', description: 'Versão Pro do PS5 com mais poder.' },
@@ -2073,6 +2125,8 @@
     const fontSizeSelect = document.getElementById('fontSizeSelect');
     const densitySelect = document.getElementById('densitySelect');
     const animationToggle = document.getElementById('animationToggle');
+    const searchToggleBtn = document.getElementById('search-toggle');
+    const searchInputContainer = document.querySelector('.search-input-container');
 
     // State Variables
     let currentInventoryPage = 1;
@@ -2108,8 +2162,7 @@
     toggleBtn.addEventListener('click', () => {
         sidebar.classList.toggle('collapsed');
         localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
-        mainContent.classList.toggle('sidebar-collapsed', sidebar.classList.contains('collapsed')); // Corrected logic here
-        // Re-render charts after sidebar transition to get correct width
+        mainContent.classList.toggle('sidebar-collapsed', sidebar.classList.contains('collapsed'));
         setTimeout(() => {
             if(document.getElementById('sales-analysis-content').classList.contains('active')) {
                 updateSalesAnalysis();
@@ -2129,6 +2182,14 @@
         }
     });
 
+    searchToggleBtn.addEventListener('click', () => {
+        searchInputContainer.classList.toggle('active');
+        const searchInput = searchInputContainer.querySelector('input');
+        if (searchInputContainer.classList.contains('active')) {
+            setTimeout(() => searchInput.focus(), 100);
+        }
+    });
+
     // --- PERSONALIZATION ---
     function applyPersonalizationSettings() {
         // Theme
@@ -2138,7 +2199,7 @@
             opt.classList.toggle('active-theme', opt.dataset.theme === savedTheme);
         });
         // Font Size, Density, Animations
-        const savedFontSize = localStorage.getItem('fontSize') || 'small'; // Alterado para 'small' como padrão
+        const savedFontSize = localStorage.getItem('fontSize') || 'medium';
         const savedDensity = localStorage.getItem('density') || 'comfortable';
         const animationsDisabled = localStorage.getItem('animationsDisabled') === 'true';
 
@@ -2295,7 +2356,7 @@
         document.getElementById('activeCoupons').textContent = mockCoupons.filter(c => c.active).length;
 
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // Define para o início do dia
+        today.setHours(0, 0, 0, 0);
         const todayMovements = historyLog.filter(e => {
             const eventDate = new Date(e.date);
             eventDate.setHours(0, 0, 0, 0);
@@ -2331,7 +2392,7 @@
     }
 
 
-    // --- TABLE POPULATION & RENDERING ---
+    // --- TABLE & CARD POPULATION & RENDERING ---
     function getProductRowHTML(product, type = 'inventory') {
         let stockStatusClass = 'status-ok';
         let stockStatusText = 'OK';
@@ -2389,10 +2450,56 @@
         }
         return '';
     }
+    
+    function getProductCardHTML(product) {
+         let stockStatusClass = 'status-ok';
+        let stockStatusText = 'OK';
+
+        if (product.stock === 0) {
+            stockStatusClass = 'status-esgotado';
+            stockStatusText = 'Esgotado';
+        } else if (product.stock <= product.minStock) {
+            stockStatusClass = 'status-baixo-estoque';
+            stockStatusText = 'Baixo Estoque';
+        }
+        const imageSrc = product.imageUrl || '';
+        const imageContent = imageSrc 
+            ? `<img src="${imageSrc}" alt="${product.name}" class="product-image-sm !w-16 !h-16" onerror="this.parentElement.innerHTML = '<div class=\'product-image-sm !w-16 !h-16\'><i class=\'fas fa-camera-slash\'></i></div>'">`
+            : `<div class="product-image-sm !w-16 !h-16"><i class="fas fa-box"></i></div>`;
+
+        return `
+            <div class="product-card">
+                 <div class="flex items-center gap-4">
+                    ${imageContent}
+                    <div class="flex-grow">
+                        <div class="product-card-title">${product.name}</div>
+                        <div class="product-card-detail">Cód: ${product.id}</div>
+                        <div class="product-card-detail">Grupo: ${product.group}</div>
+                    </div>
+                </div>
+                <div class="flex flex-wrap justify-between items-center mt-2">
+                    <div class="flex flex-col">
+                        <div class="product-card-detail">Estoque: <span class="text-[var(--text-color-default)] font-medium">${product.stock}</span></div>
+                        <div class="product-card-detail">Preço: <span class="text-[var(--text-color-default)] font-medium">${formatCurrency(product.price)}</span></div>
+                    </div>
+                    <div>
+                        <span class="status-badge ${stockStatusClass}">${stockStatusText}</span>
+                    </div>
+                </div>
+                <div class="product-card-actions">
+                    <button title="Entrada" onclick="openEntryModal('${product.id}', '${product.name.replace(/'/g, "\\'")}')" class="text-blue-400 hover:text-blue-300 p-2"><i class="fas fa-plus-circle"></i></button>
+                    <button title="Saída" onclick="openOutputModal('${product.id}', '${product.name.replace(/'/g, "\\'")}')" class="text-yellow-500 hover:text-yellow-400 p-2"><i class="fas fa-minus-circle"></i></button>
+                    <button title="Editar" onclick="openEditModal('${product.id}')" class="text-indigo-400 hover:text-indigo-300 p-2"><i class="fas fa-edit"></i></button>
+                    <button title="Excluir" onclick="openDeleteModal('${product.id}')" class="text-red-500 hover:text-red-400 p-2"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+        `;
+    }
 
     function populateInventoryTable() {
         const tableBody = document.getElementById('inventoryTableBody');
-        if(!tableBody) return;
+        const cardView = document.getElementById('inventoryCardView');
+        if(!tableBody || !cardView) return;
         
         const filterGroup = document.getElementById('inventoryFilterGroup').value;
         const sortBy = document.getElementById('inventorySortBy').value;
@@ -2425,22 +2532,27 @@
         const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
         const paginatedProducts = filteredProducts.slice((currentInventoryPage - 1) * itemsPerPage, currentInventoryPage * itemsPerPage);
 
-        tableBody.innerHTML = ''; 
+        tableBody.innerHTML = '';
+        cardView.innerHTML = '';
+
         if (paginatedProducts.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="9" class="table-cell text-center text-[var(--text-color-muted)] py-8">Nenhuma mercadoria encontrada.</td></tr>`;
+            const noResults = `Nenhuma mercadoria encontrada.`;
+            tableBody.innerHTML = `<tr><td colspan="9" class="table-cell text-center text-[var(--text-color-muted)] py-8">${noResults}</td></tr>`;
+            cardView.innerHTML = `<div class="p-8 text-center text-[var(--text-color-muted)]">${noResults}</div>`;
         } else if (displayMode === 'grouped') {
             const groupsOnPage = [...new Set(paginatedProducts.map(p => p.group))].sort();
             groupsOnPage.forEach(groupName => {
                 const groupHeaderRow = `<tr class="bg-[var(--bg-dark)] sticky top-0 z-10"><td colspan="9" class="table-cell text-lg font-semibold text-[var(--accent-green-primary)] py-3">${groupName}</td></tr>`;
                 tableBody.innerHTML += groupHeaderRow;
-                // Filter products again to ensure only products for the current group are shown under its header
                 paginatedProducts.filter(p => p.group === groupName).forEach(product => {
                     tableBody.innerHTML += getProductRowHTML(product, 'inventory');
+                    cardView.innerHTML += getProductCardHTML(product);
                 });
             });
         } else {
              paginatedProducts.forEach(product => {
                 tableBody.innerHTML += getProductRowHTML(product, 'inventory');
+                cardView.innerHTML += getProductCardHTML(product);
             });
         }
         renderPaginationControls(filteredProducts.length, totalPages);
@@ -2902,7 +3014,7 @@
         if (product && quantity > 0) {
             product.stock += quantity;
             if (unitCost !== null) {
-                product.cost = unitCost; // Atualiza o custo unitário se fornecido
+                product.cost = unitCost;
             }
             logEvent('entrada', `Entrada de ${quantity} un. de "${product.name}".`, { quantity, code: product.id, newCost: unitCost });
             this.reset();
@@ -2938,7 +3050,6 @@
         product.stock -= quantity;
         const saleValue = reason === 'venda' ? product.price * quantity : 0;
         
-        // Adiciona a venda ao mock de salesData se for uma venda
         if (reason === 'venda') {
             salesData.push({
                 date: new Date(),
@@ -2946,8 +3057,8 @@
                 quantity: quantity,
                 value: saleValue,
                 group: product.group,
-                client: 'Cliente Genérico', // Mock data
-                paymentMethod: ['Cartão de Crédito', 'PIX', 'Boleto'][Math.floor(Math.random() * 3)] // Mock data
+                client: 'Cliente Genérico',
+                paymentMethod: ['Cartão de Crédito', 'PIX', 'Boleto'][Math.floor(Math.random() * 3)]
             });
         }
 
@@ -2957,7 +3068,7 @@
         populateInventoryTable();
         updateDashboardStats();
         populateLowStockTable();
-        updateSalesAnalysis(); // Atualiza a análise de vendas após uma saída
+        updateSalesAnalysis();
     });
     
     document.getElementById('transferForm')?.addEventListener('submit', function(e) {
@@ -2967,13 +3078,12 @@
         if (product && quantity > 0 && product.stock >= quantity) {
             const origin = document.getElementById('transferOrigin').value;
             const destination = document.getElementById('transferDestination').value;
-            // No backend, this would actually move stock. Here, we just log it.
             logEvent('transferencia', `Transferência de ${quantity} un. de "${product.name}" de ${origin} para ${destination}.`);
             alert('Transferência registrada no histórico!');
             this.reset();
             document.getElementById('transferProductDisplay').value = '';
             transferProductCode = null;
-            populateHistoryTable(); // Atualiza histórico após transferência
+            populateHistoryTable();
         } else {
             alert("Erro: Verifique a mercadoria, quantidade e estoque disponível.");
         }
@@ -2998,7 +3108,7 @@
         } else if (currentModalTarget === 'transfer') {
             document.getElementById('transferProductDisplay').value = displayValue;
             transferProductCode = code;
-        } else if (currentModalTarget === 'deleteProduct') { // Handle delete product from search modal
+        } else if (currentModalTarget === 'deleteProduct') {
             openDeleteModal(code);
         }
         closeModal('searchModal');
@@ -3050,9 +3160,9 @@
                 break;
             case 'week':
                 startDate = new Date(now);
-                startDate.setDate(now.getDate() - now.getDay()); // Início da semana (domingo)
+                startDate.setDate(now.getDate() - now.getDay());
                 endDate = new Date(startDate);
-                endDate.setDate(startDate.getDate() + 6); // Fim da semana (sábado)
+                endDate.setDate(startDate.getDate() + 6);
                 endDate.setHours(23, 59, 59, 999);
                 break;
             case 'month':
@@ -3070,8 +3180,8 @@
                 endDate = new Date(document.getElementById('salesDateEnd').value + 'T23:59:59');
                 break;
             default:
-                startDate = new Date(0); // Epoch start
-                endDate = new Date(); // Now
+                startDate = new Date(0);
+                endDate = new Date();
         }
 
         const filteredSales = salesData.filter(sale => {
@@ -3099,9 +3209,9 @@
         filteredSales.forEach(sale => {
             let key;
             if (salesPeriod === 'year') {
-                key = `${sale.date.getFullYear()}-${(sale.date.getMonth() + 1).toString().padStart(2, '0')}`; // YYYY-MM
+                key = `${sale.date.getFullYear()}-${(sale.date.getMonth() + 1).toString().padStart(2, '0')}`;
             } else {
-                key = sale.date.toISOString().split('T')[0]; // YYYY-MM-DD
+                key = sale.date.toISOString().split('T')[0];
             }
             timeSeriesMap.set(key, (timeSeriesMap.get(key) || 0) + sale.value);
         });
@@ -3115,7 +3225,7 @@
 
         drawPieChart('salesPieChart', salesByGroupArray);
         drawLineChart('salesLineChart', timeSeriesData);
-        drawBarChart('salesBarChart', timeSeriesData); // Use full time series for bar chart as well
+        drawBarChart('salesBarChart', timeSeriesData);
 
         // Top Lists
         const topProducts = {};
@@ -3167,10 +3277,9 @@
 
     document.getElementById('salesPeriod')?.addEventListener('change', function() {
         document.getElementById('customDateRange').classList.toggle('hidden', this.value !== 'custom');
-        // Ao mudar o período, redefinir as datas personalizadas para evitar dados antigos
         document.getElementById('salesDateStart').value = '';
         document.getElementById('salesDateEnd').value = '';
-        updateSalesAnalysis(); // Atualiza imediatamente com o novo período
+        updateSalesAnalysis();
     });
 
     document.getElementById('applySalesFilter')?.addEventListener('click', updateSalesAnalysis);
@@ -3179,7 +3288,7 @@
     function drawPieChart(containerId, data) {
         const container = document.getElementById(containerId);
         if (!container) return;
-        container.innerHTML = ''; // Limpa o SVG existente
+        container.innerHTML = '';
         const w = container.clientWidth;
         const h = container.clientHeight;
         const radius = Math.min(w, h) / 2 - 20;
@@ -3196,7 +3305,7 @@
         }
         
         const total = data.reduce((sum, d) => sum + d.sales, 0);
-        let startAngle = 0; // Começar do topo
+        let startAngle = 0;
 
         const colors = ['#63d471', '#FFD43B', '#f89820', '#9b4f96', '#00ADD8', '#DEA584', '#FFAC45', '#CC342D', '#3178C6', '#7F52FF', '#777BB4'];
         
@@ -3205,13 +3314,12 @@
             if (sliceAngle === 0) return;
             const endAngle = startAngle + sliceAngle;
             
-            // Coordenadas para o arco
             const x1 = w / 2 + radius * Math.cos(startAngle);
             const y1 = h / 2 + radius * Math.sin(startAngle);
             const x2 = w / 2 + radius * Math.cos(endAngle);
             const y2 = h / 2 + radius * Math.sin(endAngle);
 
-            const largeArcFlag = sliceAngle > Math.PI ? 1 : 0; // Para arcos maiores que 180 graus
+            const largeArcFlag = sliceAngle > Math.PI ? 1 : 0;
 
             const pathData = `M ${w/2},${h/2} L ${x1},${y1} A ${radius},${radius} 0 ${largeArcFlag},1 ${x2},${y2} Z`;
 
@@ -3235,7 +3343,7 @@
         container.innerHTML = '';
         const w = container.clientWidth;
         const h = container.clientHeight;
-        const p = 40; // padding
+        const p = 40;
         const innerWidth = w - 2 * p;
         const innerHeight = h - 2 * p;
 
@@ -3252,20 +3360,17 @@
 
         const xMin = new Date(data[0].date);
         const xMax = new Date(data[data.length - 1].date);
-        const yMax = Math.max(...data.map(d => d.sales)) * 1.1; // 10% a mais para o topo
+        const yMax = Math.max(...data.map(d => d.sales)) * 1.1;
 
-        // Escalas
         const xScale = (date) => p + (new Date(date) - xMin) / (xMax - xMin) * innerWidth;
         const yScale = (value) => h - p - (value / yMax) * innerHeight;
 
-        // Linha do gráfico
         const points = data.map(d => `${xScale(d.date)},${yScale(d.sales)}`).join(' ');
         const line = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
         line.setAttribute('points', points);
         line.classList.add('chart-line');
         container.appendChild(line);
 
-        // Pontos nos dados
         data.forEach(d => {
             const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             circle.setAttribute('cx', xScale(d.date));
@@ -3278,13 +3383,11 @@
             container.appendChild(circle);
         });
 
-        // Eixos
         const xAxis = `<line x1="${p}" y1="${h-p}" x2="${w-p}" y2="${h-p}" class="axis"/>`;
         const yAxis = `<line x1="${p}" y1="${p}" x2="${p}" y2="${h-p}" class="axis"/>`;
         container.innerHTML += xAxis + yAxis;
 
-        // Labels do Eixo X (datas)
-        const numXLabels = Math.min(data.length, 5); // Limitar o número de labels para não sobrepor
+        const numXLabels = Math.min(data.length, 5);
         for (let i = 0; i < numXLabels; i++) {
             const idx = Math.floor(i * (data.length - 1) / (numXLabels - 1));
             const date = data[idx].date;
@@ -3297,7 +3400,6 @@
             container.appendChild(text);
         }
 
-        // Labels do Eixo Y (valores)
         const numYLabels = 5;
         for (let i = 0; i <= numYLabels; i++) {
             const value = (yMax / numYLabels) * i;
@@ -3310,7 +3412,6 @@
             text.textContent = formatCurrency(value);
             container.appendChild(text);
 
-            // Linhas de grade
             const gridLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
             gridLine.setAttribute('x1', p);
             gridLine.setAttribute('y1', yPos);
@@ -3319,7 +3420,7 @@
             gridLine.setAttribute('stroke', 'var(--border-color)');
             gridLine.setAttribute('stroke-dasharray', '2,2');
             gridLine.classList.add('grid-line');
-            if (i > 0 && i < numYLabels) { // Não desenhar nas pontas dos eixos
+            if (i > 0 && i < numYLabels) {
                 container.appendChild(gridLine);
             }
         }
@@ -3331,7 +3432,7 @@
         container.innerHTML = '';
         const w = container.clientWidth;
         const h = container.clientHeight;
-        const p = 40; // padding
+        const p = 40;
         const innerWidth = w - 2 * p;
         const innerHeight = h - 2 * p;
 
@@ -3346,10 +3447,10 @@
             return;
         }
 
-        const barPadding = 0.1; // Padding entre as barras
+        const barPadding = 0.1;
         const barWidth = innerWidth / data.length * (1 - barPadding);
         const barMargin = innerWidth / data.length * barPadding / 2;
-        const maxY = Math.max(...data.map(d => d.sales)) * 1.1; // 10% a mais para o topo
+        const maxY = Math.max(...data.map(d => d.sales)) * 1.1;
 
         data.forEach((d, i) => {
             const barHeight = (d.sales / maxY) * innerHeight;
@@ -3368,7 +3469,6 @@
             rect.appendChild(title);
             container.appendChild(rect);
 
-            // Labels do Eixo X (datas)
             const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
             text.setAttribute('x', x + barWidth / 2);
             text.setAttribute('y', h - p + 15);
@@ -3377,7 +3477,6 @@
             container.appendChild(text);
         });
         
-        // Eixo Y (valores)
         const numYLabels = 5;
         for (let i = 0; i <= numYLabels; i++) {
             const value = (maxY / numYLabels) * i;
@@ -3390,7 +3489,6 @@
             text.textContent = formatCurrency(value);
             container.appendChild(text);
 
-            // Linhas de grade
             const gridLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
             gridLine.setAttribute('x1', p);
             gridLine.setAttribute('y1', yPos);
@@ -3404,7 +3502,6 @@
             }
         }
 
-        // Eixo X
         const xAxis = `<line x1="${p}" y1="${h-p}" x2="${w-p}" y2="${h-p}" class="axis"/>`;
         const yAxis = `<line x1="${p}" y1="${p}" x2="${p}" y2="${h-p}" class="axis"/>`;
         container.innerHTML += xAxis + yAxis;
@@ -3413,7 +3510,6 @@
 
     // --- INITIALIZATION ---
     function initialize() {
-        // Load settings from localStorage
         const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
         if (isCollapsed) {
             sidebar.classList.add('collapsed');
@@ -3428,13 +3524,10 @@
         applyPersonalizationSettings();
         adjustLayout();
         
-        // Initial data population
         logEvent('info', 'Sistema iniciado.');
         updateDashboardStats();
         populateLowStockTable();
         
-        // Setup event listeners
-        window.addEventListener('resize', adjustLayout);
         document.getElementById('inventorySearchInput')?.addEventListener('input', () => { currentInventoryPage=1; populateInventoryTable(); });
         document.getElementById('inventoryFilterGroup')?.addEventListener('change', () => { currentInventoryPage=1; populateInventoryTable(); });
         document.getElementById('inventorySortBy')?.addEventListener('change', () => { currentInventoryPage=1; populateInventoryTable(); });
@@ -3442,7 +3535,6 @@
         document.getElementById('itemsPerPageSelect')?.addEventListener('change', () => { currentInventoryPage=1; populateInventoryTable(); });
         document.getElementById('applyHistoryFilter')?.addEventListener('click', populateHistoryTable);
 
-        // Set default active tab
         menuItems[0].click();
     }
     
@@ -3472,7 +3564,6 @@
             }
         });
     });
-
 
     initialize();
 });
